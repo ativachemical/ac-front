@@ -1,0 +1,77 @@
+:root {
+  --primary-color: #759fe7;
+  --bg-color: #ffffff;
+  --bg-secondary-color: #ececec;
+  --bg-tertiary-color: #c2c2c2;
+  --bg-quaternary-color: #f7f7f7;/*table*/
+  --bg-quinary-color: #ddd;/*table*/
+  --text-color: #8b8b8b;
+  --text-header-color: #052c54;
+  --accent-color: #2f334f;
+  --text-apresentation-color: #404d63;
+  --text-solid: #052c54;
+  --text-secundary-color: #b9b9b9; /*text, border inputs*/
+  --text-button: #ffffff;
+  --solid-color: #f4f4f4;
+  --text-logged-color: rgba(47, 51, 79, 0.55);
+  --button-color: #759fe7;
+  --danger-color: #ff4a4a;
+  --success-color: #83eb80;
+  --error-color: #ff7f7f;
+  --admin-color: #fcb920;
+  --admin-color-opacity: #f0bb3e2f;
+  --bg-theme-color: linear-gradient(
+    90deg,
+    rgba(19, 159, 210, 0.72) 0%,
+    rgba(67, 72, 226, 0.62) 100%
+  );
+  --box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.25);
+  --box-shadow-secondary: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* transition: 0.5s; */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+svg {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+svg {
+  fill: var(--text-secundary-color);
+  width: 22px;
+  height: auto;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 8px;
+  border: 4px solid var(--bg-color);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+  border-radius: 8px;
+}

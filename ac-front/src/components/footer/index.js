@@ -56,10 +56,13 @@ export function Footer() {
           </div>
         </Styled.Left>
 
-        {/* <Styled.MiddleContent>
+        <Styled.MiddleContent>
           <Styled.MiddleRight>
+            <Styled.FooterTitle>Fornecendo Soluções</Styled.FooterTitle>
+            <Styled.Link>Sobre nós</Styled.Link>
+            <Styled.Link>Notícias</Styled.Link>
           </Styled.MiddleRight>
-        </Styled.MiddleContent> */}
+        </Styled.MiddleContent>
 
         <Styled.RightContent>
           <Styled.Gap>

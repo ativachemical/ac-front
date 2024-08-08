@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import * as Styles from "./style";
-import { DefaultImg } from "../../../assets/imgs";
-import { Align, Img } from "../../../style";
-import api from "../../../services/ac-api";
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../../buttons/button";
-import { setProductImage } from "../../../redux/product/slice";
+import React, { useEffect, useState } from "react"
+import * as Styles from "./style"
+import { DefaultImg } from "../../../assets/imgs"
+import { Align, Img } from "../../../style"
+import api from "../../../services/ac-api"
+import { useDispatch, useSelector } from "react-redux"
+import { Button } from "../../buttons/button"
+import { setProductImage } from "../../../redux/product/slice"
 
 export function InputFileBase({ onChange, onSave }) {
+  const isModalByIdOpen = useSelector(
+    (state) => state.productReducer.isModalByIdOpen
+  )
+
   return (
     <Styles.UploadContainer>
       <Styles.UploadLabel htmlFor="file-upload">Substituir</Styles.UploadLabel>
@@ -17,9 +21,11 @@ export function InputFileBase({ onChange, onSave }) {
         accept=".png, .jpg, .jpeg"
         onChange={onChange}
       />
-      <Button text={"Salvar"} onClick={onSave} type={"primary"} />
+      {isModalByIdOpen && (
+        <Button text={"Salvar"} onClick={onSave} type={"primary"} />
+      )}
     </Styles.UploadContainer>
-  );
+  )
 }
 
 export function InputFile({
@@ -29,74 +35,73 @@ export function InputFile({
   defaultImage,
   onChange,
 }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(DefaultImg);
-  const [imageDetails, setImageDetails] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(DefaultImg)
+  const [imageDetails, setImageDetails] = useState({})
 
   const dispatch = useDispatch()
-  const userType = useSelector((state) => state.userReducer.userType);
-  
+  const userType = useSelector((state) => state.userReducer.userType)
 
   useEffect(() => {
     if (defaultImage?.base64Image) {
       setImagePreview(
         `data:image/${defaultImage.extension};base64,${defaultImage.base64Image}`
-      );
+      )
       setImageDetails({
         resolution: defaultImage.resolution,
         extension: defaultImage.extension,
         sizeKB: defaultImage.sizeKB,
         sizeMB: defaultImage.sizeMB,
-      });
+      })
     }
-  }, [defaultImage]);
+  }, [defaultImage])
 
   useEffect(() => {
     return () => {
       if (imagePreview && imagePreview !== DefaultImg) {
-        URL.revokeObjectURL(imagePreview);
+        URL.revokeObjectURL(imagePreview)
       }
-    };
-  }, [imagePreview]);
+    }
+  }, [imagePreview])
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    
+    const file = event.target.files[0]
+
     if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
-      
-      const reader = new FileReader();
+      setSelectedImage(file)
+      setImagePreview(URL.createObjectURL(file))
+
+      const reader = new FileReader()
       reader.onload = (e) => {
-        const base64Image = e.target.result;
-  
-        const img = new Image();
+        const base64Image = e.target.result
+
+        const img = new Image()
         img.onload = () => {
-          const resolution = `${img.width} x ${img.height}`;
-          const extension = file.name.split(".").pop();
-          const sizeKB = (file.size / 1024).toFixed(2);
-          const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-  
+          const resolution = `${img.width} x ${img.height}`
+          const extension = file.name.split(".").pop()
+          const sizeKB = (file.size / 1024).toFixed(2)
+          const sizeMB = (file.size / (1024 * 1024)).toFixed(2)
+
           setImageDetails({
             resolution,
             extension,
             sizeKB,
             sizeMB,
-          });
-          console.log("FILE INPUT:",file)
-          dispatch(setProductImage(file));
-        };
-        img.src = base64Image;
-      };
-      reader.readAsDataURL(file);
-  
+          })
+          console.log("FILE INPUT:", file)
+          dispatch(setProductImage(file))
+        }
+        img.src = base64Image
+      }
+      reader.readAsDataURL(file)
+
       if (onChange) {
-        onChange(file);
+        onChange(file)
       }
     } else {
-      console.warn("Nenhum arquivo foi selecionado.");
+      console.warn("Nenhum arquivo foi selecionado.")
     }
-  };
+  }
 
   const handleSubmit = async () => {
     if (selectedImage) {
@@ -105,16 +110,16 @@ export function InputFile({
           productId,
           selectedImage,
           userToken
-        );
-        console.log("Imagem enviada com sucesso:", response);
-        setImagePreview(URL.createObjectURL(selectedImage));
+        )
+        console.log("Imagem enviada com sucesso:", response)
+        setImagePreview(URL.createObjectURL(selectedImage))
       } catch (error) {
-        console.error("Erro ao enviar imagem:", error);
+        console.error("Erro ao enviar imagem:", error)
       }
     } else {
-      console.warn("Nenhuma imagem foi selecionada para envio.");
+      console.warn("Nenhuma imagem foi selecionada para envio.")
     }
-  };
+  }
 
   return (
     <>
@@ -140,26 +145,26 @@ export function InputFile({
         <Img src={imagePreview} borderRadius="20px" width="230px" shadow />
       )}
     </>
-  );
+  )
 }
 
 const editProductImage = async (id, productImage, userToken) => {
   try {
-    const formData = new FormData();
-    formData.append("file", productImage);
+    const formData = new FormData()
+    formData.append("file", productImage)
 
-    console.log("Dados do FormData:", Array.from(formData.entries()));
+    console.log("Dados do FormData:", Array.from(formData.entries()))
 
     const response = await api.post(`/product/upload-image/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${userToken}`,
         "Content-Type": "multipart/form-data",
       },
-    });
+    })
 
-    return response.data;
+    return response.data
   } catch (error) {
-    console.error("Erro ao fazer a requisição da API:", error);
-    throw error;
+    console.error("Erro ao fazer a requisição da API:", error)
+    throw error
   }
-};
+}

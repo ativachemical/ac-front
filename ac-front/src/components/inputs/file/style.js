@@ -2,10 +2,11 @@ import styled from 'styled-components';
 
 export const UploadContainer = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin: 10px 0 0 0;
+  gap:10px;
+  user-select: none;
 `;
 
 export const UploadLabel = styled.label`
@@ -27,7 +28,7 @@ export const FileInput = styled.input`
 
 export const ImageUploaderContainer = styled.div`
   display: flex;
-  user-select: none;
+  /* user-select: none; */
   width:100%;
   flex-direction: column;
   align-items: center;
@@ -37,6 +38,7 @@ export const ImageUploaderContainer = styled.div`
 export const Img = styled.img`
   user-select: none;
   width: 230px;
+  margin-bottom: 5px;
   border-radius: ${(props) => props.borderRadius};
   filter: drop-shadow(0px 0px 6px #2f334f8c);
 `;
@@ -46,6 +48,6 @@ export const ImageContent = styled.div`
   flex-direction: column;
   height: auto;
   width: 100%;
-  max-width: 150px;
+  max-width: 230px;
   align-items: center;
 `

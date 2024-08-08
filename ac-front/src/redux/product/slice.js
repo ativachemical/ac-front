@@ -11,6 +11,7 @@ const initialState = {
   totalPages: 120,
   isModalByIdOpen: false,
   isModalCreateProductOpen: false,
+  productImage: "",
 }
 
 const allSegments = ["agricultura", "tintas_e_resinas", "tratamento_de_agua", "cuidados_em_casa"]
@@ -71,6 +72,12 @@ const productSlice = createSlice({
     toggleIsModalCreateProductOpen: (state, action) => {
       state.isModalCreateProductOpen = action.payload !== undefined ? action.payload : !state.isModalCreateProductOpen
     },
+    setProductImage: (state, action) => {
+      state.productImage = action.payload // Novo reducer para atualizar `productImage`
+    },
+    getProductImage: (state) => {
+      return state.productImage
+    },
   },
 })
 
@@ -87,6 +94,8 @@ export const {
   getIsModalByIdOpen,
   toggleIsModalCreateProductOpen,
   getIsModalCreateProductOpen,
+  setProductImage,
+  getProductImage,
 } = productSlice.actions
 
 export default productSlice.reducer

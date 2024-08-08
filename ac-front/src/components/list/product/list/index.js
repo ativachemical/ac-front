@@ -11,9 +11,16 @@ import api from "../../../../services/ac-api"
 export const getProductList = async (segments, isActive, search) => {
   try {
     const requestData = {
-      segments,
-      is_active: isActive,
       search,
+      segments,
+      columns: [
+        "nome_comercial",
+        "nome_quimico",
+        "funcao",
+        "aplicacao",
+        "segmentos",
+      ],
+      is_active: isActive,
     }
     const response = await api.post("/product/filter", requestData)
     return response.data // Adjust according to your API response structure
@@ -24,7 +31,16 @@ export const getProductList = async (segments, isActive, search) => {
 
 export const getProductById = async (id) => {
   try {
-    const response = await api.get(`/product/specification-tsv-format/${id}`)
+    const response = await api.get(`/product/${id}`)
+    return response.data // Ajuste conforme a estrutura do seu retorno de API
+  } catch (error) {
+    console.error("Error making the API request:", error)
+  }
+}
+
+export const getProductImageById = async (id) => {
+  try {
+    const response = await api.get(`/product/image-supabase-base64/${id}`)
     return response.data // Ajuste conforme a estrutura do seu retorno de API
   } catch (error) {
     console.error("Error making the API request:", error)
@@ -35,6 +51,7 @@ export function ProductList({ type = "table" }) {
   //, itemById = productListById
   const [products, setProducts] = useState([])
   const [productById, setProductById] = useState(null)
+  const [productImageById, setProductImageById] = useState(null)
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch = useDispatch()
@@ -63,8 +80,10 @@ export function ProductList({ type = "table" }) {
   const handleClickItem = async (itemId) => {
     try {
       const data = await getProductById(itemId)
-      dispatch(toggleIsModalByIdOpen())
+      const dataImage = await getProductImageById(itemId)
       setProductById(data)
+      setProductImageById(dataImage)
+      dispatch(toggleIsModalByIdOpen())
     } catch (error) {
       console.error("Error fetching product details:", error)
     }
@@ -88,7 +107,7 @@ export function ProductList({ type = "table" }) {
         <div>Error loading data.</div>
       ) : (
         <>
-          <ProductModalById productById={productById} />
+          <ProductModalById productById={productById} productImageById={productImageById} />
           <Styled.Content>
             {type === "table" && (
               <ScrollX>

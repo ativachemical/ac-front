@@ -13,6 +13,7 @@ export function Button({
   type,
   color,
   response,
+  htmlFor
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [buttonType, setButtonType] = useState(type)
@@ -53,6 +54,7 @@ export function Button({
       disabled={isLoading}
       type={buttonType} // Use buttonType instead of type here
       color={color}
+      htmlFor={htmlFor}
     >
       {isLoading ? (
         <Styles.ContentIcon type={buttonType}>

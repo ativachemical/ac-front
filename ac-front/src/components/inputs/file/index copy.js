@@ -83,7 +83,6 @@ export function InputFile({
             sizeKB,
             sizeMB,
           });
-          console.log("FILE INPUT:",file)
           dispatch(setProductImage(file));
         };
         img.src = base64Image;

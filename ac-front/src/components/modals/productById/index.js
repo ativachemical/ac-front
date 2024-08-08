@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react"
 import { BasicModal } from "../../modals/basic"
 import {
-  InputComplex,
   Button,
   InputFile,
   DynamicInputs,
   SegmentIconsInput,
+  InputSimple,
 } from "../../index"
 import { Align } from "../../../style"
 import { useSelector, useDispatch } from "react-redux"
 import {
+  setProductImage,
   toggleIsModalByIdOpen,
   toggleIsModalCreateProductOpen,
 } from "../../../redux/product/slice"
@@ -18,15 +19,11 @@ import { InputTable } from "../../inputs/inputTable"
 
 export const editProductById = async (id, productEdited, userToken) => {
   try {
-    const response = await api.put(
-      `/product/specification-tsv-format/${id}`,
-      productEdited,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      }
-    )
+    const response = await api.put(`/product/${id}`, productEdited, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
 
     return response.data
   } catch (error) {
@@ -52,27 +49,38 @@ export const changeDeleteStatusProductById = async (id, userToken) => {
   }
 }
 
-export const createProduct = async (product, userToken) => {
+export const createProduct = async (imageFile, product, userToken) => {
+  const formData = new FormData()
+  console.log(imageFile)
+  if (imageFile) {
+    formData.append("image", imageFile)
+  } else {
+    console.warn("Nenhuma imagem foi fornecida.")
+  }
+
+  formData.append("createProductDto", JSON.stringify(product))
+
   try {
-    const response = await api.post(
-      `/product/specification-tsv-format`,
-      product,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      }
-    )
+    const response = await api.post(`/product`, formData, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
 
     return response.data
   } catch (error) {
     console.error("Error making the API request:", error)
+    throw error
   }
 }
 
-export function ProductModalById({ productById }) {
+export function ProductModalById({ productById, productImageById }) {
   const [product, setProduct] = useState(null)
-  const [productTitle, setProductTitle] = useState("")
+  const [comercialName, setComercialName] = useState("")
+  const [chemicalName, setChemicalName] = useState("")
+  const [functionProduct, setFunctionProduct] = useState("")
+  const [application, setApplication] = useState("")
   const [isEdit, setIsEdit] = useState(false)
   const [segmentListActive, setSegmentListActive] = useState({
     agricultura: false,
@@ -80,10 +88,8 @@ export function ProductModalById({ productById }) {
     tratamento_de_agua: false,
     cuidados_em_casa: false,
   })
-
-  const [inputItemInTable, setInputItemInTable] = useState([])
   const [inputTopics, setInputTopics] = useState([])
-  const [inputTable, setInputTable] = useState([])
+  const [inputTable, setInputTable] = useState("")
 
   const dispatch = useDispatch()
   const userToken = useSelector((state) => state.userReducer.userToken)
@@ -93,53 +99,35 @@ export function ProductModalById({ productById }) {
   const isModalCreateProductOpen = useSelector(
     (state) => state.productReducer.isModalCreateProductOpen
   )
+  const productImage = useSelector((state) => state.productReducer.productImage)
+
   const userType = useSelector((state) => state.userReducer.userType)
 
   useEffect(() => {
-    setProduct({
-      product_title: "",
-      segments: [],
-      item_in_table: [
-        { name: "Nome Comercial", value: "" },
-        { name: "Nome Químico", value: "" },
-        { name: "Função", value: "" },
-        { name: "Aplicação", value: "" },
-      ],
-      topics: [],
-      data: "",
-    })
-    setProductTitle("")
-    setSegmentListActive({
-      agricultura: false,
-      tintas_e_resinas: false,
-      tratamento_de_agua: false,
-      cuidados_em_casa: false,
-    })
-    setInputItemInTable([
-      { id: Date.now() + Math.random(), name: "Nome Comercial", value: "" },
-      { id: Date.now() + Math.random(), name: "Nome Químico", value: "" },
-      { id: Date.now() + Math.random(), name: "Função", value: "" },
-      { id: Date.now() + Math.random(), name: "Aplicação", value: "" },
-    ])
-    setInputTopics([])
-    setInputTable("")
-  }, [isModalCreateProductOpen])
-
-  useEffect(() => {
-    if (isModalByIdOpen && productById) {
-      setProductTitle(productById.product_title)
-      setInputItemInTable(() => {
-        if (
-          productById.item_in_table &&
-          Array.isArray(productById.item_in_table)
-        ) {
-          return productById.item_in_table.map((topic) => ({
-            id: Date.now() + Math.random(),
-            ...topic,
-          }))
-        }
-        return []
+    if (isModalCreateProductOpen) {
+      // Reset state for creating a new product
+      setProduct(null)
+      dispatch(setProductImage(""))
+      setComercialName("")
+      setChemicalName("")
+      setFunctionProduct("")
+      setApplication("")
+      setInputTopics([])
+      setInputTable("")
+      setSegmentListActive({
+        agricultura: false,
+        tintas_e_resinas: false,
+        tratamento_de_agua: false,
+        cuidados_em_casa: false,
       })
+      setIsEdit(true)
+    } else if (productById) {
+      // Set state for editing an existing product
+      setProduct(productById)
+      setComercialName(productById.comercial_name || "")
+      setChemicalName(productById.chemical_name || "")
+      setFunctionProduct(productById.function || "")
+      setApplication(productById.application || "")
       setInputTopics(() => {
         if (productById.topics && Array.isArray(productById.topics)) {
           return productById.topics.map((topic) => ({
@@ -156,9 +144,16 @@ export function ProductModalById({ productById }) {
         tratamento_de_agua: productById.segments.includes("tratamento_de_agua"),
         cuidados_em_casa: productById.segments.includes("cuidados_em_casa"),
       })
-      setProduct(productById)
+      dispatch(setProductImage(productImageById || ""))
+      setIsEdit(false) // Set isEdit to false for editing
     }
-  }, [isModalByIdOpen, productById])
+  }, [
+    isModalByIdOpen,
+    isModalCreateProductOpen,
+    productById,
+    productImageById,
+    dispatch,
+  ])
 
   const handleClickSaveProduct = async () => {
     try {
@@ -166,22 +161,27 @@ export function ProductModalById({ productById }) {
         (key) => segmentListActive[key]
       )
       const productEdited = {
-        product_title: productTitle,
-        segments,
-        item_in_table: inputItemInTable,
+        comercial_name: comercialName,
+        chemical_name: chemicalName,
+        application: application,
+        function: functionProduct,
+        product_enums: [
+          {
+            name: "segmentos",
+            value: segments,
+          },
+        ],
         topics: inputTopics,
         data: inputTable,
       }
 
       let response
-      if (isModalByIdOpen) {
-        response = await editProductById(
-          productById.id,
-          productEdited,
-          userToken
-        )
+      if (product && !isModalCreateProductOpen) {
+        response = await editProductById(product.id, productEdited, userToken)
       } else if (isModalCreateProductOpen) {
-        response = await createProduct(productEdited, userToken)
+        console.log("----")
+        console.log(productImage)
+        response = await createProduct(productImage, productEdited, userToken)
       }
 
       if (!response) {
@@ -190,7 +190,7 @@ export function ProductModalById({ productById }) {
       return response
     } catch (error) {
       console.error("Error editing product:", error.message)
-      throw error // Rethrow the error to be caught by Button component
+      throw error // Re-throw the error to be caught by Button component
     }
   }
 
@@ -199,9 +199,6 @@ export function ProductModalById({ productById }) {
     toggleIsOpenModal()
   }
 
-  const handleInputItemInTableChange = (value) => {
-    setInputItemInTable(value)
-  }
   const handleInputTopicsChange = (value) => {
     setInputTopics(value)
   }
@@ -209,9 +206,20 @@ export function ProductModalById({ productById }) {
     setInputTable(value)
   }
 
-  const handleProductTitleChange = (event) => {
-    const newName = event.target.value
-    setProductTitle(newName)
+  const handleChemicalName = (event) => {
+    setChemicalName(event.target.value)
+  }
+
+  const handleComercialName = (event) => {
+    setComercialName(event.target.value)
+  }
+
+  const handleFunctionProduct = (event) => {
+    setFunctionProduct(event.target.value)
+  }
+
+  const handleApplication = (event) => {
+    setApplication(event.target.value)
   }
 
   const toggleEdit = () => {
@@ -233,14 +241,14 @@ export function ProductModalById({ productById }) {
     })
   }
 
-  if (!product) {
+  if (!product && !isModalCreateProductOpen) {
     return null
   }
 
   return (
     <BasicModal
-      key={product.id}
-      title={productTitle}
+      key={product?.id || "create"}
+      title={comercialName}
       isEdit={isEdit}
       isOpen={isModalByIdOpen || isModalCreateProductOpen}
       handleEdit={true}
@@ -251,7 +259,12 @@ export function ProductModalById({ productById }) {
       handleDelete={handleDeleteProduct}
     >
       <Align column gap={"20px"}>
-        <InputFile isEdit={isEdit} />
+        <InputFile
+          isEdit={isEdit}
+          productId={productById?.id}
+          userToken={userToken}
+          defaultImage={productImage.data}
+        />
         <SegmentIconsInput
           segmentListActive={segmentListActive}
           isEdit={isEdit}
@@ -259,23 +272,41 @@ export function ProductModalById({ productById }) {
         />
 
         <Align gap={"20px"} column>
-          {isEdit && (
-            <InputComplex
-              type="text"
-              value={productTitle}
-              maxW={"200px"}
-              onChange={handleProductTitleChange}
-            />
-          )}
-
-          <DynamicInputs
-            type="topic"
-            inputValues={inputItemInTable}
+          <InputSimple
+            type="textarea"
+            title="Nome Comercial"
+            value={comercialName}
             isEdit={isEdit}
-            onInputValuesChange={handleInputItemInTableChange}
-            fixed
+            maxW={"200px"}
+            onChange={handleComercialName}
           />
 
+          <InputSimple
+            type="textarea"
+            title="Nome Químico"
+            value={chemicalName}
+            isEdit={isEdit}
+            maxW={"200px"}
+            onChange={handleChemicalName}
+          />
+
+          <InputSimple
+            type="textarea"
+            title="Função"
+            value={functionProduct}
+            isEdit={isEdit}
+            maxW={"200px"}
+            onChange={handleFunctionProduct}
+          />
+          <InputSimple
+            type="textarea"
+            title="Aplicação"
+            value={application}
+            isEdit={isEdit}
+            maxW={"200px"}
+            onChange={handleApplication}
+          />
+          <br />
           <DynamicInputs
             type="topic"
             inputValues={inputTopics}
@@ -284,7 +315,7 @@ export function ProductModalById({ productById }) {
           />
 
           <InputTable
-            values={inputTable}
+            values={inputTable || ""}
             isEdit={isEdit}
             onInputValuesChange={handleInputTableChange}
           />

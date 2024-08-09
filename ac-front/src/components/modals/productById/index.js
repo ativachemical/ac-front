@@ -51,7 +51,6 @@ export const changeDeleteStatusProductById = async (id, userToken) => {
 
 export const createProduct = async (imageFile, product, userToken) => {
   const formData = new FormData()
-  console.log(imageFile)
   if (imageFile) {
     formData.append("image", imageFile)
   } else {
@@ -179,8 +178,6 @@ export function ProductModalById({ productById, productImageById }) {
       if (product && !isModalCreateProductOpen) {
         response = await editProductById(product.id, productEdited, userToken)
       } else if (isModalCreateProductOpen) {
-        console.log("----")
-        console.log(productImage)
         response = await createProduct(productImage, productEdited, userToken)
       }
 

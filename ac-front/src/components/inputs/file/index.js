@@ -88,7 +88,6 @@ export function InputFile({
             sizeKB,
             sizeMB,
           })
-          console.log("FILE INPUT:", file)
           dispatch(setProductImage(file))
         }
         img.src = base64Image
@@ -111,7 +110,6 @@ export function InputFile({
           selectedImage,
           userToken
         )
-        console.log("Imagem enviada com sucesso:", response)
         setImagePreview(URL.createObjectURL(selectedImage))
       } catch (error) {
         console.error("Erro ao enviar imagem:", error)
@@ -152,9 +150,6 @@ const editProductImage = async (id, productImage, userToken) => {
   try {
     const formData = new FormData()
     formData.append("file", productImage)
-
-    console.log("Dados do FormData:", Array.from(formData.entries()))
-
     const response = await api.post(`/product/upload-image/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${userToken}`,

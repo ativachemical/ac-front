@@ -13,6 +13,7 @@ export const getProductList = async (segments, isActive, search) => {
     const requestData = {
       search,
       segments,
+      limit_string: 150,
       columns: [
         "nome_comercial",
         "nome_quimico",
@@ -68,7 +69,7 @@ export function ProductList({ type = "table" }) {
       console.error("Error fetching product list:", error)
       setLoading(false)
     }
-  }, [segments,searchQuery])
+  }, [segments, searchQuery])
 
   useEffect(() => {
     if (initialLoad) {
@@ -100,14 +101,20 @@ export function ProductList({ type = "table" }) {
   const skipsPerPage = useSelector((state) => state.productReducer.skipsPerPage)
   return (
     <>
-      <SearchInput onSearchClick={refreshProductList} onInputChange={handleInputChange} />
+      <SearchInput
+        onSearchClick={refreshProductList}
+        onInputChange={handleInputChange}
+      />
       {loading ? (
         <div>Loading...</div>
       ) : !products ? (
         <div>Error loading data.</div>
       ) : (
         <>
-          <ProductModalById productById={productById} productImageById={productImageById} />
+          <ProductModalById
+            productById={productById}
+            productImageById={productImageById}
+          />
           <Styled.Content>
             {type === "table" && (
               <ScrollX>

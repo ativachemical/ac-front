@@ -21,26 +21,27 @@ export function BasicModal({
   const [handleEdit] = useState(initialHandleEdit)
   const userType = useSelector((state) => state.userReducer.userType);
 
-  const handleClickIsOpen = (e) => {
-    if (!e.target.closest(".modal-content")) {
-      handleModal()
-    }
-  }
+  // const handleClickIsOpen = (e) => {
+  //   if (!e.target.closest(".modal-content")) {
+  //     handleModal()
+  //   }
+  // }
 
-  useEffect(() => {
-    if (isOpen && fixed) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "auto"
-    }
-  }, [isOpen, fixed])
+  // useEffect(() => {
+  //   if (isOpen && fixed) {
+  //     document.body.style.overflow = "hidden"
+  //   } else {
+  //     document.body.style.overflow = "auto"
+  //   }
+  // }, [isOpen, fixed])
 
   useEffect(() => {
     setIsEdit(initialIsEdit)
   }, [initialIsEdit])
 
   return fixed ? (
-    <Styled.BackgroundOutsideModal isOpen={isOpen} onClick={handleClickIsOpen}>
+    //onClick={handleClickIsOpen}
+    <Styled.BackgroundOutsideModal isOpen={isOpen}> 
       <Styled.Modal
         isOpen={isOpen}
         fixed={fixed}

@@ -105,7 +105,7 @@ export function InputFile({
   const handleSubmit = async () => {
     if (selectedImage) {
       try {
-        const response = await editProductImage(
+        await editProductImage(
           productId,
           selectedImage,
           userToken

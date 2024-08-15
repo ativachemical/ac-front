@@ -11,6 +11,7 @@ export const BackgroundOutsideModal = styled.div`
   bottom: 0;
   padding: 20px;
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  overflow: hidden;
   justify-content: center;
   align-items: center;
 

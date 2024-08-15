@@ -25,53 +25,53 @@ const formatDataToTSV = (data) => {
 
 export function InputTable({
   type = "tsv",
-  values = "",
+  inputValue = "",
   isEdit = true,
-  onInputValuesChange,
+  onChange, // Change prop name to match usage
 }) {
-  const [productData, setProductData] = useState({ headers: [], rows: [] })
-  const [inputText, setInputText] = useState("")
-  const [showInput, setShowInput] = useState(false)
+  const [productData, setProductData] = useState({ headers: [], rows: [] });
+  const [inputText, setInputText] = useState("");
+  const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
-    if (type === "tsv" && typeof values === "string" && values) {
-      const parsedData = parseTSVToData(values)
-      setProductData(parsedData)
-      setInputText(values)
-      setShowInput(true)
-    } else if (values === "") {
-      setShowInput(false)
+    if (type === "tsv" && typeof inputValue === "string" && inputValue) {
+      const parsedData = parseTSVToData(inputValue);
+      setProductData(parsedData);
+      setInputText(inputValue);
+      setShowInput(true);
+    } else if (inputValue === "") {
+      setShowInput(false);
     }
-  }, [values, type])
+  }, [inputValue, type]);
 
   useEffect(() => {
-    if (onInputValuesChange) {
-      onInputValuesChange(formatDataToTSV(productData))
+    if (onChange) { // Adjust the function call
+      onChange(formatDataToTSV(productData));
     }
-  }, [productData, onInputValuesChange])
+  }, [productData, onChange]);
 
   const handleInputChange = (event) => {
-    const newText = event.target.value
-    setInputText(newText)
+    const newText = event.target.value;
+    setInputText(newText);
 
     if (type === "tsv") {
-      const newData = parseTSVToData(newText)
-      setProductData(newData)
+      const newData = parseTSVToData(newText);
+      setProductData(newData);
     }
-  }
+  };
 
   const handleRemoveData = () => {
-    setShowInput(false)
-    setProductData({ headers: [], rows: [] })
-    setInputText("")
-  }
+    setShowInput(false);
+    setProductData({ headers: [], rows: [] });
+    setInputText("");
+  };
 
   const handleAddData = () => {
-    setShowInput(true)
-    const emptyData = { headers: [], rows: [] }
-    setProductData(emptyData)
-    setInputText("")
-  }
+    setShowInput(true);
+    const emptyData = { headers: [], rows: [] };
+    setProductData(emptyData);
+    setInputText("");
+  };
 
   return (
     <>
@@ -125,5 +125,6 @@ export function InputTable({
         </>
       )}
     </>
-  )
+  );
 }
+

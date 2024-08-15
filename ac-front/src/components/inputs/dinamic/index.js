@@ -1,55 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { InputComplex } from "../inputComplex"; // Ajuste o caminho conforme necessário
-import { Align, Gap } from "../../../style"; // Ajuste o caminho conforme necessário
-import * as Styled from "./style"; // Ajuste o caminho conforme necessário
-import { Text } from "../../text"; // Ajuste o caminho conforme necessário
+import React, { useCallback } from "react"
+import { InputComplex } from "../inputComplex"
+import { Align, Gap } from "../../../style"
+import * as Styled from "./style"
+import { Text } from "../../text"
 
 export function DynamicInputs({
   type = "topic",
   inputValues = [],
   isEdit = true,
   fixed = false,
-  onInputValuesChange,
+  onChange, // Alterado de onInputValuesChange para onChange
 }) {
-  const [inputs, setInputs] = useState(() => {
-    if (inputValues.length > 0 && Array.isArray(inputValues)) {
-      return inputValues;
-    }
-    return [];
-  });
+  const handleAddInput = useCallback(() => {
+    const newInput = { id: Date.now() + Math.random(), name: "", value: "" }
+    onChange([...inputValues, newInput])
+  }, [inputValues, onChange])
 
-  useEffect(() => {
-    if (onInputValuesChange) {
-      onInputValuesChange(inputs);
-    }
-  }, [inputs, onInputValuesChange]);
+  const handleRemoveTopic = useCallback(
+    (index) => {
+      const updatedInputs = inputValues.filter((_, i) => i !== index)
+      onChange(updatedInputs)
+    },
+    [inputValues, onChange]
+  )
 
-  const handleAddInput = () => {
-    setInputs((prevInputs) => [
-      ...prevInputs,
-      { id: Date.now() + Math.random(), name: "", value: "" },
-    ]);
-  };
-
-  const handleRemoveTopic = (index) => {
-    setInputs((prevInputs) => prevInputs.filter((_, i) => i !== index));
-  };
-
-  const handleChange = (id, field, value) => {
-    const newInputs = inputs.map((input) => {
-      if (input.id === id) {
-        return { ...input, [field]: value };
-      }
-      return input;
-    });
-    setInputs(newInputs);
-  };
+  const handleChange = useCallback(
+    (id, field, value) => {
+      const updatedInputs = inputValues.map((input) =>
+        input.id === id ? { ...input, [field]: value } : input
+      )
+      onChange(updatedInputs)
+    },
+    [inputValues, onChange]
+  )
 
   return (
     <>
       {type === "topic" && (
         <>
-          {inputs.map((input, index) => (
+          {inputValues.map((input, index) => (
             <Gap wrapResponsive key={input.id}>
               {isEdit ? (
                 <>
@@ -78,8 +67,8 @@ export function DynamicInputs({
                 </>
               ) : (
                 <>
-                  <Text text={`${input.name}:`} bold />
-                  <Text text={input.value} />
+                  <Text text={`${input.name}:`} bold responsive />
+                  <Text text={input.value} maxW={"100%"} />
                 </>
               )}
             </Gap>
@@ -91,5 +80,5 @@ export function DynamicInputs({
         </>
       )}
     </>
-  );
+  )
 }

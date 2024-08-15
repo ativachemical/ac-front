@@ -63,8 +63,8 @@ export function InputSimple({
           </>
           ):(
             <>
-            <Text text={`${title}:`} bold />
-            <Text text={value} />
+            <Text text={`${title}:`} bold responsive/>
+            <Text text={value} maxW={'100%'}/>
           </>
           )}
         </Gap>

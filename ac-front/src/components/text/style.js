@@ -14,6 +14,9 @@ export const A = styled.a`
 `
 
 export const Text = styled.p`
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
   font-size: ${(props) => {
     switch (props.size) {
       case "sm":
@@ -36,8 +39,19 @@ export const Text = styled.p`
       ? `${props.color}`
       : "var(--text-apresentation-color)"};
   text-align: ${(props) => (props.center ? "center" : "")};
+
   max-width: ${(props) => (props.maxW ? `${props.maxW}` : "none")};
   width: ${(props) => (props.maxW ? "100%" : "auto")};
+
+  ${(props) =>
+    props.responsive &&
+    `
+    width:200px;
+    @media (max-width: 768px) {
+      width:auto;
+      max-width: 100%;
+    }
+  `}
 `
 
 export const StyledSpace = styled.div`

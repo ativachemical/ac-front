@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { BasicModal } from "../../modals/basic"
 import {
   Button,
@@ -25,9 +25,12 @@ export const editProductById = async (id, productEdited, userToken) => {
       },
     })
 
-    return response.data
+    return response?.data
   } catch (error) {
-    console.error("Error making the API request:", error)
+    console.error(
+      "Error making the API request:",
+      error.response?.data || error.message
+    )
   }
 }
 
@@ -43,9 +46,12 @@ export const changeDeleteStatusProductById = async (id, userToken) => {
       }
     )
 
-    return response.data
+    return response?.data
   } catch (error) {
-    console.error("Error making the API request:", error)
+    console.error(
+      "Error making the API request:",
+      error.response?.data || error.message
+    )
   }
 }
 
@@ -67,118 +73,138 @@ export const createProduct = async (imageFile, product, userToken) => {
       },
     })
 
-    return response.data
+    return response?.data
   } catch (error) {
-    console.error("Error making the API request:", error)
+    console.error(
+      "Error making the API request:",
+      error.response?.data || error.message
+    )
     throw error
   }
 }
 
 export function ProductModalById({ productById, productImageById }) {
-  const [product, setProduct] = useState(null)
-  const [comercialName, setComercialName] = useState("")
-  const [chemicalName, setChemicalName] = useState("")
-  const [functionProduct, setFunctionProduct] = useState("")
-  const [application, setApplication] = useState("")
-  const [isEdit, setIsEdit] = useState(false)
+  const [product, setProduct] = useState(productById);
+  const [formData, setFormData] = useState({
+    product: null,
+    comercialName: "",
+    chemicalName: "",
+    functionProduct: "",
+    application: "",
+    inputTopics: [],
+    inputTable: "",
+    image: "",
+  });
+
   const [segmentListActive, setSegmentListActive] = useState({
     agricultura: false,
     tintas_e_resinas: false,
     tratamento_de_agua: false,
     cuidados_em_casa: false,
-  })
-  const [inputTopics, setInputTopics] = useState([])
-  const [inputTable, setInputTable] = useState("")
+  });
 
-  const dispatch = useDispatch()
-  const userToken = useSelector((state) => state.userReducer.userToken)
-  const isModalByIdOpen = useSelector(
-    (state) => state.productReducer.isModalByIdOpen
-  )
-  const isModalCreateProductOpen = useSelector(
-    (state) => state.productReducer.isModalCreateProductOpen
-  )
-  const productImage = useSelector((state) => state.productReducer.productImage)
+  const [isEdit, setIsEdit] = useState(false);
+  const dispatch = useDispatch();
+  const userToken = useSelector((state) => state.userReducer.userToken);
+  const isModalByIdOpen = useSelector((state) => state.productReducer.isModalByIdOpen);
+  const isModalCreateProductOpen = useSelector((state) => state.productReducer.isModalCreateProductOpen);
+  const productImage = useSelector((state) => state.productReducer.productImage);
+  const userType = useSelector((state) => state.userReducer.userType);
 
-  const userType = useSelector((state) => state.userReducer.userType)
+  const resetForm = useCallback(() => {
+    setFormData({
+      product: null,
+      comercialName: "",
+      chemicalName: "",
+      functionProduct: "",
+      application: "",
+      inputTopics: [],
+      inputTable: "",
+    });
+    setSegmentListActive({
+      agricultura: false,
+      tintas_e_resinas: false,
+      tratamento_de_agua: false,
+      cuidados_em_casa: false,
+    });
+    dispatch(setProductImage(""));
+  }, [dispatch]);
 
+  // Atualize o estado `product` sempre que `productById` mudar
+  useEffect(() => {
+    setProduct(productById);
+  }, [productById]);
+
+  // Atualize o `formData` sempre que `product` mudar
   useEffect(() => {
     if (isModalCreateProductOpen) {
-      // Reset state for creating a new product
-      setProduct(null)
-      dispatch(setProductImage(""))
-      setComercialName("")
-      setChemicalName("")
-      setFunctionProduct("")
-      setApplication("")
-      setInputTopics([])
-      setInputTable("")
+      resetForm();
+      dispatch(setProductImage(""));
+      setIsEdit(true);
+    } else if (isModalByIdOpen && product) {
+      setFormData({
+        product: product,
+        comercialName: product.comercial_name || "",
+        chemicalName: product.chemical_name || "",
+        functionProduct: product.function || "",
+        application: product.application || "",
+        inputTopics: product.topics?.map(topic => ({
+          id: Date.now() + Math.random(),
+          ...topic,
+        })) || [],
+        inputTable: product.data || [],
+      });
+
       setSegmentListActive({
-        agricultura: false,
-        tintas_e_resinas: false,
-        tratamento_de_agua: false,
-        cuidados_em_casa: false,
-      })
-      setIsEdit(true)
-    } else if (productById) {
-      // Set state for editing an existing product
-      setProduct(productById)
-      setComercialName(productById.comercial_name || "")
-      setChemicalName(productById.chemical_name || "")
-      setFunctionProduct(productById.function || "")
-      setApplication(productById.application || "")
-      setInputTopics(() => {
-        if (productById.topics && Array.isArray(productById.topics)) {
-          return productById.topics.map((topic) => ({
-            id: Date.now() + Math.random(),
-            ...topic,
-          }))
-        }
-        return []
-      })
-      setInputTable(productById.data || [])
-      setSegmentListActive({
-        agricultura: productById.segments.includes("agricultura"),
-        tintas_e_resinas: productById.segments.includes("tintas_e_resinas"),
-        tratamento_de_agua: productById.segments.includes("tratamento_de_agua"),
-        cuidados_em_casa: productById.segments.includes("cuidados_em_casa"),
-      })
-      dispatch(setProductImage(productImageById || ""))
-      setIsEdit(false) // Set isEdit to false for editing
+        agricultura: product.segments.includes("agricultura"),
+        tintas_e_resinas: product.segments.includes("tintas_e_resinas"),
+        tratamento_de_agua: product.segments.includes("tratamento_de_agua"),
+        cuidados_em_casa: product.segments.includes("cuidados_em_casa"),
+      });
+
+      dispatch(setProductImage(productImageById));
+      setIsEdit(false);
     }
   }, [
     isModalByIdOpen,
     isModalCreateProductOpen,
-    productById,
+    product,
     productImageById,
     dispatch,
-  ])
+    resetForm,
+  ]);
 
-  const handleClickSaveProduct = async () => {
+const handleClickSaveProduct = async () => {
     try {
       const segments = Object.keys(segmentListActive).filter(
         (key) => segmentListActive[key]
       )
+
       const productEdited = {
-        comercial_name: comercialName,
-        chemical_name: chemicalName,
-        application: application,
-        function: functionProduct,
+        comercial_name: formData.comercialName,
+        chemical_name: formData.chemicalName,
+        application: formData.application,
+        function: formData.functionProduct,
         product_enums: [
           {
             name: "segmentos",
             value: segments,
           },
         ],
-        topics: inputTopics,
-        data: inputTable,
+        topics: formData.inputTopics,
+        data: formData.inputTable,
       }
 
       let response
-      if (product && !isModalCreateProductOpen) {
-        response = await editProductById(product.id, productEdited, userToken)
+      if (formData.product && !isModalCreateProductOpen) {
+        response = await editProductById(
+          formData.product.id,
+          productEdited,
+          userToken
+        )
       } else if (isModalCreateProductOpen) {
         response = await createProduct(productImage, productEdited, userToken)
+        resetForm()
       }
 
       if (!response) {
@@ -187,70 +213,75 @@ export function ProductModalById({ productById, productImageById }) {
       return response
     } catch (error) {
       console.error("Error editing product:", error.message)
-      throw error // Re-throw the error to be caught by Button component
+      throw error
     }
   }
 
+
   const handleDeleteProduct = async () => {
-    await changeDeleteStatusProductById(productById.id, userToken)
-    toggleIsOpenModal()
-  }
+    await changeDeleteStatusProductById(formData.product.id, userToken);
+    toggleCloseModal();
+  };
 
-  const handleInputTopicsChange = (value) => {
-    setInputTopics(value)
-  }
-  const handleInputTableChange = (value) => {
-    setInputTable(value)
-  }
+  const handleInputChange = useCallback((event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }, []);
 
-  const handleChemicalName = (event) => {
-    setChemicalName(event.target.value)
-  }
+  const handleInputTopicsChange = useCallback((value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      inputTopics: value,
+    }));
+  }, []);
 
-  const handleComercialName = (event) => {
-    setComercialName(event.target.value)
-  }
+  const handleInputTableChange = useCallback((value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      inputTable: value,
+    }));
+  }, []);
 
-  const handleFunctionProduct = (event) => {
-    setFunctionProduct(event.target.value)
-  }
+  const toggleEdit = useCallback(() => {
+    setIsEdit((prevIsEdit) => !prevIsEdit);
+  }, []);
 
-  const handleApplication = (event) => {
-    setApplication(event.target.value)
-  }
+  const toggleCloseModal = useCallback(() => {
+    dispatch(toggleIsModalByIdOpen(false));
+    dispatch(toggleIsModalCreateProductOpen(false));
+    resetForm();
+  }, [dispatch, resetForm]);
 
-  const toggleEdit = () => {
-    setIsEdit((prevIsEdit) => !prevIsEdit)
-  }
+  const toggleSegmentActive = useCallback((segment) => {
+    setSegmentListActive((prevState) => ({
+      ...prevState,
+      [segment]: !prevState[segment],
+    }));
+  }, []);
 
-  const toggleIsOpenModal = () => {
-    dispatch(toggleIsModalByIdOpen(false))
-    dispatch(toggleIsModalCreateProductOpen(false))
-  }
+  const handleFileChange = (file) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      image: file,
+    }));
+  };
 
-  const toggleSegmentActive = (segment) => {
-    setSegmentListActive((prevState) => {
-      const newActiveState = !prevState[segment]
-      return {
-        ...prevState,
-        [segment]: newActiveState,
-      }
-    })
-  }
-
-  if (!product && !isModalCreateProductOpen) {
-    return null
+  if (!formData.product && !isModalCreateProductOpen) {
+    return null;
   }
 
   return (
     <BasicModal
-      key={product?.id || "create"}
-      title={comercialName}
+      key={formData.product?.id || "create"}
+      title={formData.comercialName}
       isEdit={isEdit}
       isOpen={isModalByIdOpen || isModalCreateProductOpen}
       handleEdit={true}
       fixed
-      handleModal={toggleIsOpenModal}
+      handleModal={toggleCloseModal}
       toggleEdit={toggleEdit}
       maxWidth={"1000px"}
       handleDelete={handleDeleteProduct}
@@ -258,9 +289,10 @@ export function ProductModalById({ productById, productImageById }) {
       <Align column gap={"20px"}>
         <InputFile
           isEdit={isEdit}
-          productId={productById?.id}
+          productId={formData.product?.id}
+          onChange={handleFileChange}
           userToken={userToken}
-          defaultImage={productImage.data}
+          defaultImage={productImage?.data}
         />
         <SegmentIconsInput
           segmentListActive={segmentListActive}
@@ -272,66 +304,64 @@ export function ProductModalById({ productById, productImageById }) {
           <InputSimple
             type="textarea"
             title="Nome Comercial"
-            value={comercialName}
+            value={formData.comercialName}
+            name="comercialName"
             isEdit={isEdit}
             maxW={"200px"}
-            onChange={handleComercialName}
+            onChange={handleInputChange}
           />
 
           <InputSimple
             type="textarea"
             title="Nome Químico"
-            value={chemicalName}
+            value={formData.chemicalName}
+            name="chemicalName"
             isEdit={isEdit}
             maxW={"200px"}
-            onChange={handleChemicalName}
+            onChange={handleInputChange}
           />
 
           <InputSimple
             type="textarea"
             title="Função"
-            value={functionProduct}
+            value={formData.functionProduct}
+            name="functionProduct"
             isEdit={isEdit}
             maxW={"200px"}
-            onChange={handleFunctionProduct}
+            onChange={handleInputChange}
           />
+
           <InputSimple
             type="textarea"
             title="Aplicação"
-            value={application}
+            value={formData.application}
+            name="application"
             isEdit={isEdit}
             maxW={"200px"}
-            onChange={handleApplication}
+            onChange={handleInputChange}
           />
-          <br />
+
           <DynamicInputs
-            type="topic"
-            inputValues={inputTopics}
+            inputValues={formData.inputTopics}
             isEdit={isEdit}
-            onInputValuesChange={handleInputTopicsChange}
+            onChange={handleInputTopicsChange}
           />
 
           <InputTable
-            values={inputTable || ""}
+            inputValue={formData.inputTable}
             isEdit={isEdit}
-            onInputValuesChange={handleInputTableChange}
+            onChange={handleInputTableChange}
           />
         </Align>
-      </Align>
-      {userType === "admin" && isEdit && (
-        <>
+
+        {userType === "admin" && isEdit && (
           <Button
             text={"Salvar"}
             onClick={handleClickSaveProduct}
             type={"primary"}
           />
-          <Button
-            text={"Cancelar"}
-            onClick={toggleIsOpenModal}
-            type={"secondary"}
-          />
-        </>
-      )}
+        )}
+      </Align>
     </BasicModal>
-  )
+  );
 }

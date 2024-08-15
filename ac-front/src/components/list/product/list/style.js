@@ -72,21 +72,27 @@ export const Table = styled.table`
   }
 
   th {
+    text-align: center;
     background-color: var(--bg-secondary-color);
     color: var(--text-solid);
     font-size:17px;
   }
 
+  thead tr:first-child th {
+    background-color: var(--text-solid);
+    color: var(--bg-secondary-color);
+  }
+
   tr:nth-child(even) {
-    background-color: var(--bg-secondary-color);
+    background-color: #ecf5ff;
   }
 
   tr:nth-child(odd) {
-    background-color: var(--bg-quaternary-color); /* Cor vermelha para a última linha */
+    background-color: #dde4ed; /* Cor vermelha para a última linha */
   }
 
   tr:hover {
-    background-color: var(--bg-quinary-color);
+    background-color: #c1cedf;
   }
 
   /* Border-radius para a primeira linha */

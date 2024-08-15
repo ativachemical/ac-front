@@ -41,7 +41,7 @@ export const Flex = styled.div`
 
 export const ImgLogoInline = styled.img`
   cursor: pointer;
-  max-width: 200px;
+  max-width: 232px;
   width: 100%;
   height: auto;
 `
@@ -83,8 +83,9 @@ export const Li = styled.li`
 `
 
 export const NavLinkItem = styled(NavLink)`
+  transition: 1s;
   color: var(--text-header-color);
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 10px;
   text-decoration: none;
   cursor: pointer;
@@ -92,14 +93,21 @@ export const NavLinkItem = styled(NavLink)`
   &.active {
     font-weight: 700;
   }
+  @media(width<768px) {
+    font-size: 20px;
+  }
 `
 
 export const A = styled.a`
   color: var(--text-header-color);
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 10px;
   text-decoration: none;
   cursor: pointer;
+
+  @media(width<768px) {
+    font-size: 20px;
+  }
 `
 
 export const BaseIcon = styled.div`
@@ -129,7 +137,7 @@ fill: var(--admin-color);
 `
 
 export const SectionWithPaddingTop = styled.div`
-  padding-top: 86px;
+  padding-top: 84px;
 `
 
 export const Points = styled.div`

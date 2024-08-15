@@ -140,7 +140,7 @@ export function InputFile({
           </Styles.ImageContent>
         </Styles.ImageUploaderContainer>
       ) : (
-        <Img src={imagePreview} borderRadius="20px" width="230px" shadow />
+        <Img src={imagePreview} borderRadius="20px" width="230px" margin="initial" shadow />
       )}
     </>
   )

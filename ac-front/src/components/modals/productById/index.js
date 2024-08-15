@@ -84,7 +84,7 @@ export const createProduct = async (imageFile, product, userToken) => {
 }
 
 export function ProductModalById({ productById, productImageById }) {
-  const [product, setProduct] = useState(productById);
+  const [product, setProduct] = useState(productById)
   const [formData, setFormData] = useState({
     product: null,
     comercialName: "",
@@ -94,22 +94,26 @@ export function ProductModalById({ productById, productImageById }) {
     inputTopics: [],
     inputTable: "",
     image: "",
-  });
+  })
 
   const [segmentListActive, setSegmentListActive] = useState({
     agricultura: false,
     tintas_e_resinas: false,
     tratamento_de_agua: false,
     cuidados_em_casa: false,
-  });
+  })
 
-  const [isEdit, setIsEdit] = useState(false);
-  const dispatch = useDispatch();
-  const userToken = useSelector((state) => state.userReducer.userToken);
-  const isModalByIdOpen = useSelector((state) => state.productReducer.isModalByIdOpen);
-  const isModalCreateProductOpen = useSelector((state) => state.productReducer.isModalCreateProductOpen);
-  const productImage = useSelector((state) => state.productReducer.productImage);
-  const userType = useSelector((state) => state.userReducer.userType);
+  const [isEdit, setIsEdit] = useState(false)
+  const dispatch = useDispatch()
+  const userToken = useSelector((state) => state.userReducer.userToken)
+  const isModalByIdOpen = useSelector(
+    (state) => state.productReducer.isModalByIdOpen
+  )
+  const isModalCreateProductOpen = useSelector(
+    (state) => state.productReducer.isModalCreateProductOpen
+  )
+  const productImage = useSelector((state) => state.productReducer.productImage)
+  const userType = useSelector((state) => state.userReducer.userType)
 
   const resetForm = useCallback(() => {
     setFormData({
@@ -120,27 +124,27 @@ export function ProductModalById({ productById, productImageById }) {
       application: "",
       inputTopics: [],
       inputTable: "",
-    });
+    })
     setSegmentListActive({
       agricultura: false,
       tintas_e_resinas: false,
       tratamento_de_agua: false,
       cuidados_em_casa: false,
-    });
-    dispatch(setProductImage(""));
-  }, [dispatch]);
+    })
+    dispatch(setProductImage(""))
+  }, [dispatch])
 
   // Atualize o estado `product` sempre que `productById` mudar
   useEffect(() => {
-    setProduct(productById);
-  }, [productById]);
+    setProduct(productById)
+  }, [productById])
 
   // Atualize o `formData` sempre que `product` mudar
   useEffect(() => {
     if (isModalCreateProductOpen) {
-      resetForm();
-      dispatch(setProductImage(""));
-      setIsEdit(true);
+      resetForm()
+      dispatch(setProductImage(""))
+      setIsEdit(true)
     } else if (isModalByIdOpen && product) {
       setFormData({
         product: product,
@@ -148,22 +152,23 @@ export function ProductModalById({ productById, productImageById }) {
         chemicalName: product.chemical_name || "",
         functionProduct: product.function || "",
         application: product.application || "",
-        inputTopics: product.topics?.map(topic => ({
-          id: Date.now() + Math.random(),
-          ...topic,
-        })) || [],
+        inputTopics:
+          product.topics?.map((topic) => ({
+            id: Date.now() + Math.random(),
+            ...topic,
+          })) || [],
         inputTable: product.data || [],
-      });
+      })
 
       setSegmentListActive({
         agricultura: product.segments.includes("agricultura"),
         tintas_e_resinas: product.segments.includes("tintas_e_resinas"),
         tratamento_de_agua: product.segments.includes("tratamento_de_agua"),
         cuidados_em_casa: product.segments.includes("cuidados_em_casa"),
-      });
+      })
 
-      dispatch(setProductImage(productImageById));
-      setIsEdit(false);
+      dispatch(setProductImage(productImageById))
+      setIsEdit(false)
     }
   }, [
     isModalByIdOpen,
@@ -172,9 +177,9 @@ export function ProductModalById({ productById, productImageById }) {
     productImageById,
     dispatch,
     resetForm,
-  ]);
+  ])
 
-const handleClickSaveProduct = async () => {
+  const handleClickSaveProduct = async () => {
     try {
       const segments = Object.keys(segmentListActive).filter(
         (key) => segmentListActive[key]
@@ -217,60 +222,59 @@ const handleClickSaveProduct = async () => {
     }
   }
 
-
   const handleDeleteProduct = async () => {
-    await changeDeleteStatusProductById(formData.product.id, userToken);
-    toggleCloseModal();
-  };
+    await changeDeleteStatusProductById(formData.product.id, userToken)
+    toggleCloseModal()
+  }
 
   const handleInputChange = useCallback((event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  }, []);
+    }))
+  }, [])
 
   const handleInputTopicsChange = useCallback((value) => {
     setFormData((prevState) => ({
       ...prevState,
       inputTopics: value,
-    }));
-  }, []);
+    }))
+  }, [])
 
   const handleInputTableChange = useCallback((value) => {
     setFormData((prevState) => ({
       ...prevState,
       inputTable: value,
-    }));
-  }, []);
+    }))
+  }, [])
 
   const toggleEdit = useCallback(() => {
-    setIsEdit((prevIsEdit) => !prevIsEdit);
-  }, []);
+    setIsEdit((prevIsEdit) => !prevIsEdit)
+  }, [])
 
   const toggleCloseModal = useCallback(() => {
-    dispatch(toggleIsModalByIdOpen(false));
-    dispatch(toggleIsModalCreateProductOpen(false));
-    resetForm();
-  }, [dispatch, resetForm]);
+    dispatch(toggleIsModalByIdOpen(false))
+    dispatch(toggleIsModalCreateProductOpen(false))
+    resetForm()
+  }, [dispatch, resetForm])
 
   const toggleSegmentActive = useCallback((segment) => {
     setSegmentListActive((prevState) => ({
       ...prevState,
       [segment]: !prevState[segment],
-    }));
-  }, []);
+    }))
+  }, [])
 
   const handleFileChange = (file) => {
     setFormData((prevState) => ({
       ...prevState,
       image: file,
-    }));
-  };
+    }))
+  }
 
   if (!formData.product && !isModalCreateProductOpen) {
-    return null;
+    return null
   }
 
   return (
@@ -286,61 +290,67 @@ const handleClickSaveProduct = async () => {
       maxWidth={"1000px"}
       handleDelete={handleDeleteProduct}
     >
-      <Align column gap={"20px"}>
-        <InputFile
-          isEdit={isEdit}
-          productId={formData.product?.id}
-          onChange={handleFileChange}
-          userToken={userToken}
-          defaultImage={productImage?.data}
-        />
-        <SegmentIconsInput
-          segmentListActive={segmentListActive}
-          isEdit={isEdit}
-          toggleSegmentActive={toggleSegmentActive}
-        />
+      <Align column gap={"50px"}>
+        <Align gap={"40px"} responsive>
+          <Align column gap={"20px"} width="initial">
+            <InputFile
+              isEdit={isEdit}
+              productId={formData.product?.id}
+              onChange={handleFileChange}
+              userToken={userToken}
+              defaultImage={productImage?.data}
+            />
+            <SegmentIconsInput
+              segmentListActive={segmentListActive}
+              isEdit={isEdit}
+              toggleSegmentActive={toggleSegmentActive}
+            />
+          </Align>
+
+          <Align gap={"20px"} column>
+            <InputSimple
+              type="textarea"
+              title="Nome Comercial"
+              value={formData.comercialName}
+              name="comercialName"
+              isEdit={isEdit}
+              maxW={"200px"}
+              onChange={handleInputChange}
+            />
+
+            <InputSimple
+              type="textarea"
+              title="Nome Químico"
+              value={formData.chemicalName}
+              name="chemicalName"
+              isEdit={isEdit}
+              maxW={"200px"}
+              onChange={handleInputChange}
+            />
+
+            <InputSimple
+              type="textarea"
+              title="Função"
+              value={formData.functionProduct}
+              name="functionProduct"
+              isEdit={isEdit}
+              maxW={"200px"}
+              onChange={handleInputChange}
+            />
+
+            <InputSimple
+              type="textarea"
+              title="Aplicação"
+              value={formData.application}
+              name="application"
+              isEdit={isEdit}
+              maxW={"200px"}
+              onChange={handleInputChange}
+            />
+          </Align>
+        </Align>
 
         <Align gap={"20px"} column>
-          <InputSimple
-            type="textarea"
-            title="Nome Comercial"
-            value={formData.comercialName}
-            name="comercialName"
-            isEdit={isEdit}
-            maxW={"200px"}
-            onChange={handleInputChange}
-          />
-
-          <InputSimple
-            type="textarea"
-            title="Nome Químico"
-            value={formData.chemicalName}
-            name="chemicalName"
-            isEdit={isEdit}
-            maxW={"200px"}
-            onChange={handleInputChange}
-          />
-
-          <InputSimple
-            type="textarea"
-            title="Função"
-            value={formData.functionProduct}
-            name="functionProduct"
-            isEdit={isEdit}
-            maxW={"200px"}
-            onChange={handleInputChange}
-          />
-
-          <InputSimple
-            type="textarea"
-            title="Aplicação"
-            value={formData.application}
-            name="application"
-            isEdit={isEdit}
-            maxW={"200px"}
-            onChange={handleInputChange}
-          />
-
           <DynamicInputs
             inputValues={formData.inputTopics}
             isEdit={isEdit}
@@ -363,5 +373,5 @@ const handleClickSaveProduct = async () => {
         )}
       </Align>
     </BasicModal>
-  );
+  )
 }

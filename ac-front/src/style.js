@@ -23,7 +23,8 @@ export const Img = styled.img`
   height: ${(props) => (props.height ? `${props.height}` : "auto")};
   border-radius: ${(props) =>
     props.borderRadius ? `${props.borderRadius}` : "0"};
-  margin: auto;
+
+  margin: ${(props) => (props.margin ? `${props.margin}` : "auto")};
   ${(props) =>
     props.shadow ? `filter: drop-shadow(0px 0px 6px #2f334f8c);` : ""};
 `
@@ -78,16 +79,20 @@ export const Align = styled.div`
   ${(props) => {
     switch (props.justify) {
       case "between":
-        return `justify-content: space-between;`
+        return `justify-content: space-between;`;
       case "around":
-        return `justify-content: space-around;`
+        return `justify-content: space-around;`;
       case "center":
-        return `justify-content: center;`
+        return `justify-content: center;`;
       default:
-        return `` // ou qualquer valor padrão que você queira
+        return ``; // or any default value you want
     }
   }};
-`
+
+  @media (max-width: 768px) {
+    ${(props) => (props.responsive ? `flex-direction: column;` : "")};
+  }
+`;
 
 export const ScrollX = styled.div`
   width: 100%;

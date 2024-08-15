@@ -291,7 +291,7 @@ export function ProductModalById({ productById, productImageById }) {
       handleDelete={handleDeleteProduct}
     >
       <Align column gap={"50px"}>
-        <Align gap={"40px"} responsive>
+        <Align gap={"40px"} responsive margin="60px 0 0 0">
           <Align column gap={"20px"} width="initial">
             <InputFile
               isEdit={isEdit}

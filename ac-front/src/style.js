@@ -73,26 +73,27 @@ export const Align = styled.div`
   display: flex;
   gap: ${(props) => (props.gap ? `${props.gap}` : "0")};
   width: ${(props) => (props.width ? `${props.width}` : "100%")};
+  margin: ${(props) => (props.margin ? `${props.margin}` : "")};
   ${(props) => (props.column ? `flex-direction:column;` : "")};
   ${(props) => (props.alignEnd ? `align-items:end;` : "")};
   ${(props) => (props.alignCenter ? `align-items:center;` : "")};
   ${(props) => {
     switch (props.justify) {
       case "between":
-        return `justify-content: space-between;`;
+        return `justify-content: space-between;`
       case "around":
-        return `justify-content: space-around;`;
+        return `justify-content: space-around;`
       case "center":
-        return `justify-content: center;`;
+        return `justify-content: center;`
       default:
-        return ``; // or any default value you want
+        return `` // or any default value you want
     }
   }};
 
   @media (max-width: 768px) {
     ${(props) => (props.responsive ? `flex-direction: column;` : "")};
   }
-`;
+`
 
 export const ScrollX = styled.div`
   width: 100%;

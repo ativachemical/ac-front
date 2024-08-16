@@ -74,8 +74,13 @@ export function DynamicInputs({
             </Gap>
           ))}
 
-          <Align justify={"center"}>
-            {!fixed && isEdit && <Styled.PlusIcon onClick={handleAddInput} />}
+          <Align justify={"center"} gap="5px" alignCenter>
+            {!fixed && isEdit && (
+              <>
+                <Styled.PlusIcon onClick={handleAddInput} />
+                <Text text="Tópico"/>
+              </>
+            )}
           </Align>
         </>
       )}

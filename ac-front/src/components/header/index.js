@@ -106,7 +106,7 @@ export function Header({ selectedItem }) {
           </Styled.NavLinkItem>
           {userType === "admin" && (
             <Button
-              text={"admin"}
+              text={"Sair"}
               type={"outlined"}
               icon={<Styled.LogOutIcon />}
               onClick={() => dispatch(logOut())}

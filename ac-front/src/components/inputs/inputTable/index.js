@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { InputComplex } from "../inputComplex"
 import { Align, Gap, ScrollX } from "../../../style"
 import * as Styled from "./style"
+import { Text } from "../../text"
 
 // Funções de parsing e formatação para TSV
 const parseTSVToData = (text) => {
@@ -92,8 +93,13 @@ export function InputTable({
                   </>
                 )}
               </Gap>
-              <Align justify={"center"}>
-                {!showInput && <Styled.PlusIcon onClick={handleAddData} />}
+              <Align justify={"center"} gap="5px" alignCenter>
+                {!showInput && 
+                  <>
+                    <Styled.PlusIcon onClick={handleAddData} />
+                    <Text text="Tabela"/>
+                  </>
+                }    
               </Align>
             </>
           )}

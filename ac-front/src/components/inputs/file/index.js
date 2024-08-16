@@ -105,11 +105,7 @@ export function InputFile({
   const handleSubmit = async () => {
     if (selectedImage) {
       try {
-        await editProductImage(
-          productId,
-          selectedImage,
-          userToken
-        )
+        await editProductImage(productId, selectedImage, userToken)
         setImagePreview(URL.createObjectURL(selectedImage))
       } catch (error) {
         console.error("Erro ao enviar imagem:", error)
@@ -140,7 +136,13 @@ export function InputFile({
           </Styles.ImageContent>
         </Styles.ImageUploaderContainer>
       ) : (
-        <Img src={imagePreview} borderRadius="20px" width="230px" margin="initial" shadow />
+        <Img
+          src={imagePreview}
+          borderRadius="20px"
+          width="230px"
+          margin="initial"
+          shadow
+        />
       )}
     </>
   )

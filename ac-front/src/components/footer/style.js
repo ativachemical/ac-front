@@ -12,7 +12,7 @@ export const Footer = styled.footer`
 
 export const ContentFooter = styled.footer`
   display: flex;
-  width: 900px;
+  max-width: 900px;
   gap: 20px;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -90,19 +90,6 @@ export const Link = styled.p`
   }
 `
 
-export const LastLine = styled.a`
-  font-size: 17px;
-  color: var(--solid-color);
-  opacity: 0.6;
-  gap: 20px;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-    color: var(--text-solid);
-  }
-`
-
 export const RightContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -152,4 +139,17 @@ export const Gap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+`
+
+export const LastLine = styled.a`
+  font-size: 17px;
+  color: var(--solid-color);
+  opacity: 0.6;
+  gap: 20px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--text-solid);
+  }
 `

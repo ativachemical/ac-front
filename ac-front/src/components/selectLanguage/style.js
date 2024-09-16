@@ -26,8 +26,8 @@ export const LanguageName = styled.p`
 `
 
 export const Flag = styled.img`
-  width: 30px;
-  height: fit-content;
+  width: 25px;
+  height: 100%;
   border-radius: 15%;
 `
 

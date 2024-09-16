@@ -137,3 +137,9 @@ export const ContentIcon = styled.div`
     }}
   }
 `;
+
+export const SpanText = styled.p`
+  display: inline;
+  white-space: nowrap;
+`;
+

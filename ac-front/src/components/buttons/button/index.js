@@ -65,7 +65,7 @@ export function Button({
           {icon && (
             <Styles.ContentIcon type={buttonType}>{icon}</Styles.ContentIcon>
           )}
-          {text && <span>{text}</span>}
+          {text && <Styles.SpanText>{text}</Styles.SpanText>}
         </Align>
       )}
     </Styles.Button>

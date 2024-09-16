@@ -15,8 +15,7 @@ export function SelectLanguage() {
   const getSavedLanguage = () => {
     const savedLanguage = getLocalStorage("selectedLanguage")
     return savedLanguage
-      ? languages.find((lang) => lang.googleCode === savedLanguage) ||
-          languages[1]
+      ? languages.find((lang) => lang.googleCode === savedLanguage) || languages[1]
       : languages[1]
   }
 
@@ -40,21 +39,24 @@ export function SelectLanguage() {
       translateSelect.value = languageCode
       translateSelect.dispatchEvent(new Event("change"))
     }
-  }
+  }  
 
   useEffect(() => {
     const addGoogleTranslateScript = () => {
       const script = document.createElement("script")
       script.type = "text/javascript"
-      script.src =
-        "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
       document.body.appendChild(script)
     }
-
+  
     if (!window.google || !window.google.translate) {
       addGoogleTranslateScript()
+    } else {
+      // Adicione um pequeno atraso para garantir que o script esteja pronto
+      setTimeout(() => changeLanguage(selectedLanguage.googleCode), 1000)
     }
-  }, [])
+  }, [selectedLanguage])
+  
 
   return (
     <Styled.Dropdown className="notranslate">

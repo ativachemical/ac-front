@@ -14,7 +14,7 @@ export const DropdownButton = styled.button`
     cursor: pointer;
     width: 110px;
     text-align: left;
-    border-radius: 20px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 10px; /* Espaçamento entre a bandeira e o nome */
@@ -33,7 +33,8 @@ export const LanguageOptionsContainer = styled.div`
     z-index: 1;
     width: fit-content;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
+    border-radius: 10px;
+    overflow: hidden;
 `;
 
 export const LanguageOption = styled.div`
@@ -44,7 +45,6 @@ export const LanguageOption = styled.div`
     padding: 10px;
     cursor: pointer;
     &:hover {
-        background-color: #f1f1f1;
-        border-radius: 20px;
+        background-color: var(--bg-secondary-color);
     }
 `;

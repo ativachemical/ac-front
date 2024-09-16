@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react"
 import * as Styled from "./style"
 import { Br, En, Es } from "../../assets/imgs"
-import { Text } from "../text"
 import { getLocalStorage, setLocalStorage } from "../../utils/LocalStorage" // Ajuste o caminho conforme necessário
 
 export function SelectLanguage() {
   const languages = [
     { name: "En", flag: En, googleCode: "en" },
-    { name: "PT-Br", flag: Br, googleCode: "pt" },
+    { name: "Pt-Br", flag: Br, googleCode: "pt" },
     { name: "Es", flag: Es, googleCode: "es" },
   ]
 
@@ -53,7 +52,7 @@ export function SelectLanguage() {
       addGoogleTranslateScript()
     } else {
       // Adicione um pequeno atraso para garantir que o script esteja pronto
-      setTimeout(() => changeLanguage(selectedLanguage.googleCode), 1000)
+      setTimeout(() => changeLanguage(selectedLanguage.googleCode), 0)
     }
   }, [selectedLanguage])
   
@@ -62,7 +61,7 @@ export function SelectLanguage() {
     <Styled.Dropdown className="notranslate">
       <Styled.DropdownButton onClick={toggleDropdown}>
         <Styled.Flag src={selectedLanguage.flag} />
-        <Text text={selectedLanguage.name} size={"md"} />
+        <Styled.LanguageName>{selectedLanguage.name}</Styled.LanguageName>
       </Styled.DropdownButton>
       {isOpen && (
         <Styled.LanguageOptionsContainer>
@@ -72,7 +71,7 @@ export function SelectLanguage() {
               onClick={() => handleLanguageChange(language)}
             >
               <Styled.Flag src={language.flag} />
-              <Text text={language.name} size={"md"} />
+              <Styled.LanguageName>{language.name}</Styled.LanguageName>
             </Styled.LanguageOption>
           ))}
         </Styled.LanguageOptionsContainer>

@@ -1,7 +1,6 @@
 import React from "react"
 import { WhiteLogo } from "../../assets/imgs"
 import * as Styled from "./style.js"
-import { Align } from "../../style.js"
 
 export function Footer() {
   function openMaps() {

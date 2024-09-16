@@ -15,6 +15,7 @@ import { Align, Hr, Img } from "../../style.js"
 import { useSelector, useDispatch } from "react-redux"
 import { Button } from "../buttons/button/index.js"
 import { logOut } from "../../redux/user/slice.js"
+import { SelectLanguage } from "../selectLanguage/index.js"
 
 const content = [
   {
@@ -47,7 +48,7 @@ export function Header({ selectedItem }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const [selectedPointIndex, setSelectedPointIndex] = useState(0)
   const userType = useSelector((state) => state.userReducer.userType)
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -101,17 +102,17 @@ export function Header({ selectedItem }) {
       <Styled.HeaderNav isOpenMenu={isOpenMenu}>
         <Styled.Flex>
           <Align flex alignCenter>
-          <Styled.NavLinkItem to="/">
-            <Styled.ImgLogoInline src={InlineLogo} />
-          </Styled.NavLinkItem>
-          {userType === "admin" && (
-            <Button
-              text={"Sair"}
-              type={"outlined"}
-              icon={<Styled.LogOutIcon />}
-              onClick={() => dispatch(logOut())}
-            />
-          )}
+            <Styled.NavLinkItem to="/">
+              <Styled.ImgLogoInline src={InlineLogo} />
+            </Styled.NavLinkItem>
+            {userType === "admin" && (
+              <Button
+                text={"Sair"}
+                type={"outlined"}
+                icon={<Styled.LogOutIcon />}
+                onClick={() => dispatch(logOut())}
+              />
+            )}
           </Align>
           <Styled.MenuIcon
             onClick={handleOnclickIsOpenMenu}
@@ -146,7 +147,9 @@ export function Header({ selectedItem }) {
             >
               Contato
             </Styled.A>
+          <SelectLanguage />
           </Styled.Ul>
+
         </Styled.ContentMenu>
       </Styled.HeaderNav>
       <Styled.SectionWithPaddingTop>

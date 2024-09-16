@@ -50,6 +50,7 @@ a {
 }
 
 body {
+  top: 0px !important;
   font-family: Arial, sans-serif;
 }
 
@@ -74,4 +75,14 @@ svg {
 ::-webkit-scrollbar-track {
   background: var(--bg-color);
   border-radius: 8px;
+}
+
+/* Oculta a barra de ferramentas do Google Translate */
+.skiptranslate {
+  display: none !important;
+}
+
+/* partes que nao vao ser traduzidas */
+.notranslate {
+  translate: no !important;
 }

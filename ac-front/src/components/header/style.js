@@ -57,6 +57,7 @@ export const Ul = styled.ul`
   width: 100%;
   list-style: none;
   padding: 0;
+  align-items: center;
   gap: 20px;
   @media (max-width: 768px) {
     flex-direction: column;
@@ -93,7 +94,7 @@ export const NavLinkItem = styled(NavLink)`
   &.active {
     font-weight: 700;
   }
-  @media(width<768px) {
+  @media (width<768px) {
     font-size: 20px;
   }
 `
@@ -105,7 +106,7 @@ export const A = styled.a`
   text-decoration: none;
   cursor: pointer;
 
-  @media(width<768px) {
+  @media (width<768px) {
     font-size: 20px;
   }
 `
@@ -132,8 +133,8 @@ export const MenuIcon = styled(BaseIcon).attrs({
 export const LogOutIcon = styled(BaseIcon).attrs({
   as: LogOut,
 })`
-width: 20px;
-fill: var(--admin-color);
+  width: 20px;
+  fill: var(--admin-color);
 `
 
 export const SectionWithPaddingTop = styled.div`

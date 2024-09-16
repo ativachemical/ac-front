@@ -68,6 +68,7 @@ max-width:150px;
 
 export const TextCard = styled.div`
 display:flex;
+text-align: center;
 gap:20px;
 flex-direction:column;
 align-items: center;

@@ -12,7 +12,7 @@ export const DropdownButton = styled.button`
   font-size: 16px;
   border: none;
   cursor: pointer;
-  width: 110px;
+  width: 100px;
   text-align: left;
   border-radius: 10px;
   display: flex;
@@ -37,7 +37,7 @@ export const LanguageOptionsContainer = styled.div`
   background-color: var(--bg-color);
   border: 2px solid var(--bg-tertiary-color);
   z-index: 1;
-  width: fit-content;
+  width: 100px;
   border-radius: 10px;
   overflow: hidden;
 `

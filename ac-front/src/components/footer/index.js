@@ -92,7 +92,7 @@ export function Footer() {
 
     <Align width gap="5px">
       <Styled.LinkIcon onClick={openLinkedinFelipe} />
-      <Styled.LastLine href="https://www.linkedin.com/in/felipe-sugisawa/">
+      <Styled.LastLine href="https://www.linkedin.com/in/felipe-sugisawa/" target="_blank">
         created by Felipe S.
       </Styled.LastLine>
 

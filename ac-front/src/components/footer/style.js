@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Linkedin, Whatsapp, ArrowUp } from "../../assets/icons/index.js"
+import { Linkedin, Whatsapp, ArrowUp, Link as LinkSvg } from "../../assets/icons/index.js"
 
 export const Footer = styled.footer`
   background: var(--bg-theme-color);
@@ -129,6 +129,9 @@ export const ArrowUpIcon = styled(ArrowUp)`
   fill: var(--text-color);
   border-radius: 10px;
 `
+export const LinkIcon = styled(LinkSvg)`
+  fill: var(--solid-color);
+`
 
 export const GapIcons = styled.div`
   display: flex;
@@ -148,8 +151,8 @@ export const LastLine = styled.a`
   gap: 20px;
   cursor: pointer;
 
+  text-decoration: underline;
   &:hover {
-    text-decoration: underline;
     color: var(--text-solid);
   }
 `

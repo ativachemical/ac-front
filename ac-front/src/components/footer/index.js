@@ -1,6 +1,7 @@
 import React from "react"
 import { WhiteLogo } from "../../assets/imgs"
 import * as Styled from "./style.js"
+import { Align } from "../../style.js"
 
 export function Footer() {
   function openMaps() {
@@ -9,6 +10,10 @@ export function Footer() {
 
   function openLinkedin() {
     window.open("https://www.linkedin.com/company/ativa-chemical/", "_blank")
+  }
+
+  function openLinkedinFelipe() {
+    window.open("https://www.linkedin.com/in/felipe-sugisawa/", "_blank")
   }
 
   function openWhatsapp(numberChoice) {
@@ -84,9 +89,14 @@ export function Footer() {
           </a>
         </Styled.RightContent>
       </Styled.ContentFooter>
+
+    <Align width gap="5px">
+      <Styled.LinkIcon onClick={openLinkedinFelipe} />
       <Styled.LastLine href="https://www.linkedin.com/in/felipe-sugisawa/">
         created by Felipe S.
       </Styled.LastLine>
+
+    </Align>
     </Styled.Footer>
   )
 }

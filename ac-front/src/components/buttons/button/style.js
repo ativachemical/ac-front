@@ -118,28 +118,27 @@ export const ContentIcon = styled.div`
         case "primary":
           return `
             fill: var(--text-button);
-          `;
+          `
         case "secondary":
           return `
             fill: var(--accent-color);
-          `;
+          `
         case "lite":
           return `
             fill: var(--text-solid);
-          `;
+          `
         case "outlined":
           return `
             fill: var(--admin-color);
-          `;
+          `
         default:
-          return "fill: var(--success-color)";
+          return "fill: var(--success-color)"
       }
     }}
   }
-`;
+`
 
 export const SpanText = styled.p`
   display: inline;
   white-space: nowrap;
-`;
-
+`

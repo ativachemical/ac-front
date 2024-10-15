@@ -8,15 +8,24 @@ export const Footer = styled.footer`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  @media(width < 768px){
+    text-align: center;
+  }
 `
 
 export const ContentFooter = styled.footer`
   display: flex;
   max-width: 900px;
-  gap: 20px;
+  gap: 100px;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 20px;
+
+  @media(width < 768px){
+    justify-content: center;
+    text-align: center;
+    gap: 50px;
+  }
 `
 
 export const FooterText = styled.p`
@@ -53,8 +62,9 @@ export const Flex = styled.div`
 export const Left = styled.div`
   display: flex;
   gap: 5px;
-  align-items: baseline;
   flex-direction: column;
+  text-align: center;
+  align-items: center;
 `
 
 export const FooterTitle = styled.div`
@@ -67,6 +77,9 @@ export const Bold = styled.p`
   font-weight: 600;
   color: var(--solid-color);
   font-size: 17px;
+  @media(width < 768px){
+    text-align: center;
+  }
 `
 
 export const Text = styled.p`
@@ -83,7 +96,12 @@ export const Link = styled.p`
   max-width: 200px;
   opacity: 0.9;
   gap: 20px;
+  word-break: break-all;
   cursor: pointer;
+  @media( width < 768px){
+    max-width: none;
+    text-align: center;
+  }
 
   &:hover {
     text-decoration: underline;
@@ -105,7 +123,7 @@ export const RightContent = styled.div`
 
   @media (width < 769px) {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
     width: 100%;
   }
 `
@@ -136,6 +154,9 @@ export const LinkIcon = styled(LinkSvg)`
 export const GapIcons = styled.div`
   display: flex;
   gap: 5px;
+  @media(width < 768px){
+    justify-content: center;
+  }
 `
 
 export const Gap = styled.div`

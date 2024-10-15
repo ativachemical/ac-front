@@ -38,17 +38,23 @@ export function Footer() {
     }
   }
 
+  function openEmail() {
+    window.open("mailto:ativachemical@ativachemical.com");
+  }
+  
+
   return (
     <Styled.Footer id="footer">
       <Styled.ContentFooter>
+        
         <Styled.Left>
           <Styled.ImgLogo src={WhiteLogo} />
-          <Styled.Bold>Ativa Chemical Brasil</Styled.Bold>
+          <Styled.FooterTitle>Ativa Chemical Brasil</Styled.FooterTitle>
           <br />
           <Styled.Link onClick={openMaps}>
             R. Funchal, 538, 2º A - Itaim Bibi, São Paulo - SP, 04551-060
           </Styled.Link>
-          <div>
+          <Align column alignCenter>
             <Styled.Flex>
               <Styled.Link onClick={() => openWhatsapp(1)}>
                 (11) 9 1399-1412
@@ -61,8 +67,8 @@ export function Footer() {
               </Styled.Link>
               <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(2)} />
             </Styled.Flex>
-            <Styled.Link>ativachemical@gmail.com</Styled.Link>
-          </div>
+          </Align>
+          <Styled.Link onClick={() => openEmail()}>ativachemical@ativachemical.com</Styled.Link>
         </Styled.Left>
 
         <Styled.MiddleContent>

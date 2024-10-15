@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
   InlineLogo,
   AboutUsCarousel2,
@@ -9,13 +9,13 @@ import {
   ServicesCarousel3,
   ServicesCarousel4,
   ProductsCarousel4,
-} from "../../assets/imgs"
-import * as Styled from "./style.js"
-import { Align, Hr, Img } from "../../style.js"
-import { useSelector, useDispatch } from "react-redux"
-import { Button } from "../buttons/button/index.js"
-import { logOut } from "../../redux/user/slice.js"
-import { SelectLanguage } from "../selectLanguage/index.js"
+} from "../../assets/imgs";
+import * as Styled from "./style.js";
+import { Align, Hr, Img } from "../../style.js";
+import { useSelector, useDispatch } from "react-redux";
+import { Button } from "../buttons/button/index.js";
+import { logOut } from "../../redux/user/slice.js";
+import { SelectLanguage } from "../selectLanguage/index.js";
 
 const content = [
   {
@@ -42,59 +42,59 @@ const content = [
       ServicesCarousel4,
     ],
   },
-]
+];
 
 export function Header({ selectedItem }) {
-  const [isOpenMenu, setIsOpenMenu] = useState(false)
-  const [selectedPointIndex, setSelectedPointIndex] = useState(0)
-  const userType = useSelector((state) => state.userReducer.userType)
-  const dispatch = useDispatch()
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [selectedPointIndex, setSelectedPointIndex] = useState(0);
+  const userType = useSelector((state) => state.userReducer.userType);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
       const index = content.findIndex(
         (obj) => Object.keys(obj)[0] === selectedItem
-      )
-      const imgsLength = content[index][selectedItem].length - 1
-      // console.log(`imgsLength === selectedPointIndex ${imgsLength === selectedPointIndex}`)
-      // console.log(`imgsLength:${imgsLength} selectedPointIndex:${selectedPointIndex}`)
-      setSelectedPointIndex(selectedPointIndex + 1)
-      if (imgsLength === selectedPointIndex) {
-        setSelectedPointIndex(0)
-      }
-    }, 4000)
+      );
+      const imgsLength = content[index][selectedItem].length - 1;
+      setSelectedPointIndex((prevIndex) => (imgsLength === prevIndex ? 0 : prevIndex + 1));
+    }, 4000);
 
-    return () => clearInterval(interval)
-  }, [selectedPointIndex, selectedItem])
+    return () => clearInterval(interval);
+  }, [selectedPointIndex, selectedItem]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 769) {
-        setIsOpenMenu(true)
+        setIsOpenMenu(true);
       }
-    }
+    };
 
-    handleResize()
+    handleResize();
 
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [])
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Rolar para o topo ao mudar de página
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selectedItem]);
 
   function handleOnclickIsOpenMenu() {
-    setIsOpenMenu(!isOpenMenu)
+    setIsOpenMenu(!isOpenMenu);
   }
 
   function handleOnclickIsOpenMenuSamePage() {
     if (window.innerWidth < 769) {
-      setIsOpenMenu(!isOpenMenu)
+      setIsOpenMenu(!isOpenMenu);
     }
   }
 
   function handlePointClick(index) {
-    setSelectedPointIndex(index)
+    setSelectedPointIndex(index);
   }
 
   return (
@@ -142,7 +142,7 @@ export function Header({ selectedItem }) {
             <Styled.A
               href="#footer"
               onClick={() => {
-                handleOnclickIsOpenMenuSamePage()
+                handleOnclickIsOpenMenuSamePage();
               }}
             >
               Contato
@@ -168,11 +168,11 @@ export function Header({ selectedItem }) {
                   ))}
                 </Styled.Points>
               </React.Fragment>
-            )
+            );
           }
-          return null
+          return null;
         })}
       </Styled.SectionWithPaddingTop>
     </Styled.Header>
-  )
+  );
 }

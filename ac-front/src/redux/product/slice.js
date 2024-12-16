@@ -54,6 +54,13 @@ const productSlice = createSlice({
       setLocalStorage("product_filter_segments", state.segments)
       setLocalStorage("product_filter_segments_is_all_checked", state.isAllChecked)
     },
+    justOneInSegmentList: (state, action) => {
+      const productName = action.payload;
+      state.segments = [productName]; // Define apenas o segmento selecionado
+      state.isAllChecked = allSegments.every(segment => state.segments.includes(segment));
+      setLocalStorage("product_filter_segments", state.segments);
+      setLocalStorage("product_filter_segments_is_all_checked", state.isAllChecked);
+    },
     isIncludedSegment: (state, action) => {
       return state.segments.includes(action.payload)
     },
@@ -88,6 +95,7 @@ export const {
   setSkipsPerPage,
   toggleIsManualPagination,
   updateSegmentList,
+  justOneInSegmentList,
   isIncludedSegment,
   getIsAllChecked,
   toggleIsModalByIdOpen,

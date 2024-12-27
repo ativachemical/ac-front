@@ -9,8 +9,11 @@ import {
   // toggleIsManualPagination,
   toggleIsModalCreateProductOpen,
   updateSegmentList,
+  setIsDeletedSegment,
 } from "../../../redux/product/slice.js"
 import { useDispatch, useSelector } from "react-redux"
+import { Hr } from "../../../style.js"
+import { getLocalStorage } from "../../../utils/index.js"
 
 export function SearchInput({
   placeholder = "Buscar",
@@ -25,7 +28,8 @@ export function SearchInput({
   const segments = useSelector((state) => state.productReducer.segments)
   const isAllChecked = useSelector((state) => state.productReducer.isAllChecked)
   const userType = useSelector((state) => state.userReducer.userType)
-
+  const isDeletedSegment = useSelector((state) => state.productReducer.isDeletedSegment);
+  // getIsDeletedSegment
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchInput, setSearchInput] = useState("")
 
@@ -50,6 +54,11 @@ export function SearchInput({
     dispatch(updateSegmentList(value))
   }
 
+  const handleSetIsDeletedSegment = (value) => {
+    dispatch(setIsDeletedSegment(value));
+    console.log(getLocalStorage("product_filter_is_deleted"))
+  };
+
   const handleFilterClick = () => {
     setIsModalOpen(!isModalOpen)
   }
@@ -62,10 +71,10 @@ export function SearchInput({
     dispatch(toggleIsModalCreateProductOpen(true))
   }
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    setSearchInput(value);
-    onInputChange(value);
-  };
+    const value = event.target.value
+    setSearchInput(value)
+    onInputChange(value)
+  }
 
   return (
     <>
@@ -129,6 +138,16 @@ export function SearchInput({
             value={handleIsCheckSegment("tratamento_de_agua")}
             onClick={() => handleUpdateSegmentList("tratamento_de_agua")}
           />
+          {userType === "admin" && (
+            <>
+              <Hr margin={"10px 0 10px 0"} />
+              <CheckBox
+                text="Deletados"
+                value={isDeletedSegment}
+                onClick={() => handleSetIsDeletedSegment(!isDeletedSegment)}
+              />
+            </>
+          )}
           {/* <Hr margin={"10px 0 10px 0"} />
           <CheckBox
             text={["Listagem: lista", "Listagem: tabela"]}

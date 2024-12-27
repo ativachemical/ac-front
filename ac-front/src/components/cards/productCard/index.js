@@ -66,7 +66,7 @@ export function ProductCardItem({
       </Styles.TextCard>
     </Styles.ContentCard>
   )
-}
+} 
 
 export function ProductDescription() {
   return (

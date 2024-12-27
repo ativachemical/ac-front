@@ -19,7 +19,7 @@ export const HeaderNav = styled.header`
   left: 0;
   width: 100%;
   background-color: var(--bg-color);
-  z-index: 9999;
+  z-index: 9998;
   box-shadow: var(--box-shadow);
 
   @media (max-width: 768px) {

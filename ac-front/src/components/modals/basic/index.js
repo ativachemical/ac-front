@@ -16,6 +16,8 @@ export function BasicModal({
   disableUserSelect = false,
   maxWidth = "300px",
   handleDelete,
+  handleRestore,
+  isDeleted = false,
 }) {
   const [, setIsEdit] = useState(initialIsEdit)
   const [handleEdit] = useState(initialHandleEdit)
@@ -53,8 +55,9 @@ export function BasicModal({
           <Text text={title} bold color={"var(--text-solid)"} size={"lg"} />
           <Align column alignEnd gap={"10px"} width={"auto"}>
             <Styled.CloseIcon onClick={handleModal} />
-            {handleEdit && (userType==="admin") && <Styled.EditIcon onClick={toggleEdit} />}
-            {handleEdit && (userType==="admin") && <Styled.DeleteIcon onClick={handleDelete} />}
+            {(userType==="admin") && <Styled.EditIcon onClick={toggleEdit} />}
+            {(!isDeleted && (userType==="admin")) && <Styled.DeleteIcon onClick={handleDelete} />}
+            {(isDeleted && (userType==="admin")) && <Styled.RestoreIcon onClick={handleRestore} />}
           </Align>
         </Styled.SpaceTop>
         {children}

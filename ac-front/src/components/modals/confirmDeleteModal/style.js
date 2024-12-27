@@ -2,14 +2,17 @@ import styled, { keyframes } from "styled-components"
 import { Close, Delete, Edit, Restore } from "../../../assets/icons/index"
 import { BaseIcon } from "../../../style"
 
+export const Content = styled.div`
+
+`
+
 export const BackgroundOutsideModal = styled.div`
-  z-index: 9998;
-  position: fixed;
+  z-index: 9998; /* Deve ser inferior ao modal */
+  position: absolute; /* Garantindo que cubra toda a página */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 20px;
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   overflow: hidden;
   justify-content: center;
@@ -17,14 +20,17 @@ export const BackgroundOutsideModal = styled.div`
 
   &::before {
     content: "";
-    position: absolute;
+    position: fixed; /* Fixado para cobrir toda a tela */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Opacidade aqui */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    z-index: 9997; /* Abaixo do BackgroundOutsideModal */
   }
-`
+`;
+
+
 
 export const ModalContent = styled.div`
   position: relative; /* Adicionando posição relativa para garantir que o z-index funcione */
@@ -38,7 +44,11 @@ export const ModalContent = styled.div`
   box-shadow: var(--box-shadow-secondary);
 `
 
-export const Modal = styled(ModalContent).attrs()`
+export const Modal = styled(ModalContent).attrs()`  
+  position: absolute; /* Garantindo que fique sobre tudo */
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Ajusta o posicionamento para centralização */
   width: 100%;
   ${({ fixed }) =>
     fixed
@@ -48,16 +58,14 @@ export const Modal = styled(ModalContent).attrs()`
         overflow-y: auto;
       `
       : `
-        position: absolute;
-        margin-top: 60px;
         height: fit-content;
       `}
   user-select: ${({ disableUserSelect }) =>
     disableUserSelect ? "none" : "auto"};
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : "300px")};
-  z-index: 1000;
+  z-index: 9999; /* Valor alto para estar no topo */
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
-`
+`;
 
 const spinAnimation = keyframes`
   0% {

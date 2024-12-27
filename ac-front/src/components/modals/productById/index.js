@@ -6,6 +6,7 @@ import {
   DynamicInputs,
   SegmentIconsInput,
   InputSimple,
+  ConfirmDeleteModal,
 } from "../../index"
 import { Align } from "../../../style"
 import { useSelector, useDispatch } from "react-redux"
@@ -38,6 +39,27 @@ export const changeDeleteStatusProductById = async (id, userToken) => {
   try {
     const response = await api.put(
       `/product/change-delete-status/${id}?is_deleted=true`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    )
+
+    return response?.data
+  } catch (error) {
+    console.error(
+      "Error making the API request:",
+      error.response?.data || error.message
+    )
+  }
+}
+
+export const restoreProductById = async (id, userToken) => {
+  try {
+    const response = await api.put(
+      `/product/change-delete-status/${id}?is_deleted=false`,
       {},
       {
         headers: {
@@ -104,6 +126,7 @@ export function ProductModalById({ productById, productImageById }) {
   })
 
   const [isEdit, setIsEdit] = useState(false)
+  const [isModalConfirmDeletionProductOpen, setIsModalConfirmDeletionProductOpen] = useState(false);
   const dispatch = useDispatch()
   const userToken = useSelector((state) => state.userReducer.userToken)
   const isModalByIdOpen = useSelector(
@@ -114,6 +137,11 @@ export function ProductModalById({ productById, productImageById }) {
   )
   const productImage = useSelector((state) => state.productReducer.productImage)
   const userType = useSelector((state) => state.userReducer.userType)
+
+  const handleModalConfirmDeletion = () => {
+    console.log("Abrindo modal de confirmação");
+    setIsModalConfirmDeletionProductOpen((prev) => !prev);
+  };
 
   const resetForm = useCallback(() => {
     setFormData({
@@ -222,8 +250,14 @@ export function ProductModalById({ productById, productImageById }) {
     }
   }
 
-  const handleDeleteProduct = async () => {
+  const handleConfirmDeletion = async () =>{
     await changeDeleteStatusProductById(formData.product.id, userToken)
+    setIsModalConfirmDeletionProductOpen(false)
+    toggleCloseModal()
+  }
+
+  const handleRestoreProduct = async () => {
+    await restoreProductById(formData.product.id, userToken)
     toggleCloseModal()
   }
 
@@ -278,6 +312,7 @@ export function ProductModalById({ productById, productImageById }) {
   }
 
   return (
+    <>
     <BasicModal
       key={formData.product?.id || "create"}
       title={formData.comercialName}
@@ -288,8 +323,16 @@ export function ProductModalById({ productById, productImageById }) {
       handleModal={toggleCloseModal}
       toggleEdit={toggleEdit}
       maxWidth={"1000px"}
-      handleDelete={handleDeleteProduct}
+      handleDelete={handleModalConfirmDeletion}
+      handleRestore={handleRestoreProduct}
+      isDeleted={product?.is_deleted}
     >
+      <ConfirmDeleteModal
+        isOpen={isModalConfirmDeletionProductOpen}
+        handleModal={handleModalConfirmDeletion}
+        confirmFunction={handleConfirmDeletion}
+      />
+      
       <Align column gap={"50px"}>
         <Align gap={"40px"} responsive margin="25px 0 0 0">
           <Align column gap={"20px"} width="initial">
@@ -373,5 +416,6 @@ export function ProductModalById({ productById, productImageById }) {
         )}
       </Align>
     </BasicModal>
+    </>
   )
 }

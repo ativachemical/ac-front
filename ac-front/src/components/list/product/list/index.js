@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { ProductModalById, SearchInput } from "../../../index"
 import { toggleIsModalByIdOpen } from "../../../../redux/product/slice"
 import api from "../../../../services/ac-api"
+import { getLocalStorage } from "../../../../utils"
 
 export const getProductList = async (segments, isActive, search) => {
   try {
@@ -22,6 +23,7 @@ export const getProductList = async (segments, isActive, search) => {
         "segmentos",
       ],
       is_active: isActive,
+      is_deleted: getLocalStorage("product_filter_is_deleted"),
     }
     const response = await api.post("/product/filter", requestData)
     return response.data // Adjust according to your API response structure

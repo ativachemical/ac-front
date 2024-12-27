@@ -22,7 +22,7 @@ export const getProductList = async (segments, isActive, search) => {
         "aplicacao",
         "segmentos",
       ],
-      is_active: isActive,
+      is_inactived: false,
       is_deleted: getLocalStorage("product_filter_is_deleted"),
     }
     const response = await api.post("/product/filter", requestData)
@@ -64,7 +64,7 @@ export function ProductList({ type = "table" }) {
   const refreshProductList = useCallback(async () => {
     setLoading(true)
     try {
-      const data = await getProductList(segments, true, searchQuery)
+      const data = await getProductList(segments, false, searchQuery)
       setProducts(data)
       setLoading(false)
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as Styled from "./style.js"
 // import { Hr } from "../../../style.js"
 import { BasicModal, Button, CheckBox } from "../../index.js"
@@ -13,7 +13,7 @@ import {
 } from "../../../redux/product/slice.js"
 import { useDispatch, useSelector } from "react-redux"
 import { Hr } from "../../../style.js"
-import { getLocalStorage } from "../../../utils/index.js"
+import { getLocalStorage, setLocalStorage } from "../../../utils/index.js"
 
 export function SearchInput({
   placeholder = "Buscar",
@@ -40,6 +40,12 @@ export function SearchInput({
   // const handleSetSkipsPerPage = (value) => {
   //   dispatch(setSkipsPerPage(value))
   // }
+
+  useEffect(() => {
+    if(userType !== "admin"){
+      setLocalStorage("product_filter_is_deleted", false)
+    }
+  }, [])
 
   const handleCheckAllSegments = () => {
     dispatch(toggleIsAllSegmentsChecked())

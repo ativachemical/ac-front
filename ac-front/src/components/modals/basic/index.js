@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react"
-import * as Styled from "./style"
-import { Text } from "../../text"
-import { Align } from "../../../style"
-import { useSelector } from "react-redux"
+import React, { useEffect, useRef, useState } from "react";
+import * as Styled from "./style";
+import { Text } from "../../text";
+import { Align } from "../../../style";
+import { useSelector } from "react-redux";
 
 export function BasicModal({
   title,
@@ -18,32 +18,51 @@ export function BasicModal({
   handleDelete,
   handleRestore,
   isDeleted = false,
+  isClickOutsideClose = false,
 }) {
-  const [, setIsEdit] = useState(initialIsEdit)
-  const [handleEdit] = useState(initialHandleEdit)
+  const [, setIsEdit] = useState(initialIsEdit);
+  const [handleEdit] = useState(initialHandleEdit);
   const userType = useSelector((state) => state.userReducer.userType);
+  const modalRef = useRef(null); // Referência para o modal
 
-  // const handleClickIsOpen = (e) => {
-  //   if (!e.target.closest(".modal-content")) {
-  //     handleModal()
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (isOpen && fixed) {
-  //     document.body.style.overflow = "hidden"
-  //   } else {
-  //     document.body.style.overflow = "auto"
-  //   }
-  // }, [isOpen, fixed])
+  // Lida com cliques fora do modal
+  const handleClickOutside = (e) => {
+    if (
+      isClickOutsideClose &&
+      modalRef.current &&
+      !modalRef.current.contains(e.target)
+    ) {
+      handleModal();
+    }
+  };
 
   useEffect(() => {
-    setIsEdit(initialIsEdit)
-  }, [initialIsEdit])
+    // Adicionar e remover listener de clique
+    if (isOpen) {
+      return document.addEventListener("mouseup", handleClickOutside);
+    }
+    return document.removeEventListener("mouseup", handleClickOutside);
+    
+  }, [isOpen, isClickOutsideClose]);
+
+  // Adiciona/Remove scroll
+  useEffect(() => {
+    if (isOpen && fixed) {
+      document.body.style.overflow = "hidden"; 
+    } else {
+      document.body.style.overflow = "auto"; 
+    }
+    return () => {
+      document.body.style.overflow = "auto"; 
+    };
+  }, [isOpen, fixed]);
+
+  useEffect(() => {
+    setIsEdit(initialIsEdit);
+  }, [initialIsEdit]);
 
   return fixed ? (
-    //onClick={handleClickIsOpen}
-    <Styled.BackgroundOutsideModal isOpen={isOpen}> 
+    <Styled.BackgroundOutsideModal isOpen={isOpen}>
       <Styled.Modal
         isOpen={isOpen}
         fixed={fixed}
@@ -55,9 +74,13 @@ export function BasicModal({
           <Text text={title} bold color={"var(--text-solid)"} size={"lg"} />
           <Align column alignEnd gap={"10px"} width={"auto"}>
             <Styled.CloseIcon onClick={handleModal} />
-            {(userType==="admin") && <Styled.EditIcon onClick={toggleEdit} />}
-            {(!isDeleted && (userType==="admin")) && <Styled.DeleteIcon onClick={handleDelete} />}
-            {(isDeleted && (userType==="admin")) && <Styled.RestoreIcon onClick={handleRestore} />}
+            {userType === "admin" && <Styled.EditIcon onClick={toggleEdit} />}
+            {!isDeleted && userType === "admin" && (
+              <Styled.DeleteIcon onClick={handleDelete} />
+            )}
+            {isDeleted && userType === "admin" && (
+              <Styled.RestoreIcon onClick={handleRestore} />
+            )}
           </Align>
         </Styled.SpaceTop>
         {children}
@@ -65,6 +88,7 @@ export function BasicModal({
     </Styled.BackgroundOutsideModal>
   ) : (
     <Styled.Modal
+      ref={modalRef}
       isOpen={isOpen}
       fixed={fixed}
       disableUserSelect={disableUserSelect}
@@ -77,5 +101,5 @@ export function BasicModal({
       </Styled.SpaceTop>
       {children}
     </Styled.Modal>
-  )
+  );
 }

@@ -66,12 +66,8 @@ export function SearchInput({
   };
 
   const handleFilterClick = () => {
-    setIsModalOpen(!isModalOpen)
-  }
-
-  const handleFilterIconClick = () => {
-    setIsModalOpen(!isModalOpen)
-  }
+    setIsModalOpen(!isModalOpen);
+  };
 
   const toggleIsOpenModal = () => {
     dispatch(toggleIsModalCreateProductOpen(true))
@@ -92,11 +88,12 @@ export function SearchInput({
               onChange={handleInputChange}
               value={searchInput}
             />
-            <Button
-              icon={<Styled.FilterIcon />}
-              onClick={handleFilterIconClick}
-              type={"lite"}
-            />
+            
+              <Button 
+                icon={<Styled.FilterIcon />}
+                onClick={handleFilterClick}
+                type={"lite"}
+              />
 
             <Button
               icon={<Styled.SearchIcon />}
@@ -118,6 +115,7 @@ export function SearchInput({
           isOpen={isModalOpen}
           handleModal={handleFilterClick}
           disableUserSelect
+          isClickOutsideClose
         >
           <CheckBox
             text="Todos"

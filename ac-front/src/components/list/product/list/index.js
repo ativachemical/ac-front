@@ -4,7 +4,7 @@ import { ProductCard } from "../card"
 import { Gap, ScrollX } from "../../../../style"
 import { Pagination } from "../../../pagination"
 import { useSelector, useDispatch } from "react-redux"
-import { ProductModalById, SearchInput } from "../../../index"
+import { DownloadProductModal, ProductModalById, SearchInput } from "../../../index"
 import { toggleIsModalByIdOpen } from "../../../../redux/product/slice"
 import api from "../../../../services/ac-api"
 import { getLocalStorage } from "../../../../utils"
@@ -21,9 +21,10 @@ export const getProductList = async (segments, isActive, search) => {
         "funcao",
         "aplicacao",
         "segmentos",
+        "download"
       ],
       is_inactived: false,
-      is_deleted: getLocalStorage("product_filter_is_deleted"),
+      is_deleted: getLocalStorage("product_filter_is_deleted") || false,
     }
     const response = await api.post("/product/filter", requestData)
     return response.data // Adjust according to your API response structure
@@ -51,10 +52,11 @@ export const getProductImageById = async (id) => {
 }
 
 export function ProductList({ type = "table" }) {
-  //, itemById = productListById
   const [products, setProducts] = useState([])
   const [productById, setProductById] = useState(null)
   const [productImageById, setProductImageById] = useState(null)
+  const [downloadLink, setDownloadLink] = useState(null)
+  const [isDownloadProductModalOpen, setDownloadProductModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch = useDispatch()
@@ -96,6 +98,13 @@ export function ProductList({ type = "table" }) {
     setSearchQuery(value)
   }
 
+  const toggleModalDownloadProduct = (e, downloadLink) => {
+    if (e) e.stopPropagation(); // Apenas chama stopPropagation se o evento existir
+    setDownloadProductModalOpen(!isDownloadProductModalOpen);
+    setDownloadLink(downloadLink)
+  };
+
+
   const isManualPagination = useSelector(
     (state) => state.productReducer.isManualPagination
   )
@@ -107,16 +116,20 @@ export function ProductList({ type = "table" }) {
         onSearchClick={refreshProductList}
         onInputChange={handleInputChange}
       />
+
+      {/* modals */}
+      <DownloadProductModal isOpen={isDownloadProductModalOpen} handleModal={toggleModalDownloadProduct} downloadLink={downloadLink}/>
+      <ProductModalById
+        productById={productById}
+        productImageById={productImageById}
+      />
+      {/* modals */}
       {loading ? (
         <div>Loading...</div>
       ) : !products ? (
         <div>Error loading data.</div>
       ) : (
         <>
-          <ProductModalById
-            productById={productById}
-            productImageById={productImageById}
-          />
           <Styled.Content>
             {type === "table" && (
               <ScrollX>
@@ -137,24 +150,56 @@ export function ProductList({ type = "table" }) {
                         {item.rows.map((row, index) => (
                           <td key={index}>
                             {Array.isArray(row) ? (
-                              <Gap value="10px">
-                                {row.map((segment, idx) => (
-                                  <React.Fragment key={idx}>
-                                    {segment === "agricultura" && (
-                                      <Styled.PlantIcon />
-                                    )}
-                                    {segment === "tintas_e_resinas" && (
-                                      <Styled.ColorIcon />
-                                    )}
-                                    {segment === "cuidados_em_casa" && (
-                                      <Styled.CleanHandsIcon />
-                                    )}
-                                    {segment === "tratamento_de_agua" && (
-                                      <Styled.DropPlusLessIcon />
-                                    )}
-                                  </React.Fragment>
-                                ))}
-                              </Gap>
+                              (() => {
+                                switch (true) {
+                                  // Verifica se é um array de strings
+                                  case typeof row[0] === 'string':
+                                    return (
+                                      <Gap value="10px">
+                                        {row.map((segment, idx) => (
+                                          <React.Fragment key={idx}>
+                                            {(() => {
+                                              switch (segment) {
+                                                case "agricultura":
+                                                  return <Styled.PlantIcon />;
+                                                case "tintas_e_resinas":
+                                                  return <Styled.ColorIcon />;
+                                                case "cuidados_em_casa":
+                                                  return <Styled.CleanHandsIcon />;
+                                                case "tratamento_de_agua":
+                                                  return <Styled.DropPlusLessIcon />;
+                                                default:
+                                                  return null;
+                                              }
+                                            })()}
+                                          </React.Fragment>
+                                        ))}
+                                      </Gap>
+                                    );
+
+                                  // Verifica se é um array de objetos no formato { type: string, link: string }
+                                  case typeof row[0] === 'object' && row[0] !== null:
+                                    return (
+                                      <Styled.ContentLinkDownload>
+                                        {row.map((download, idx) => (
+                                          <Styled.downloadButton
+                                            key={idx}
+                                            rel="noopener noreferrer"
+                                            onClick={
+                                              (e) => toggleModalDownloadProduct(e, download.link)
+                                            }
+                                          >
+                                            <Styled.DownloadIcon />
+                                            {download.type.toUpperCase()}
+                                          </Styled.downloadButton>
+                                        ))}
+                                      </Styled.ContentLinkDownload>
+                                    );
+
+                                  default:
+                                    return null;
+                                }
+                              })()
                             ) : (
                               row
                             )}

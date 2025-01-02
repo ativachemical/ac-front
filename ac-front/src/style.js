@@ -6,7 +6,7 @@ export const PageContent = styled.div`
   justify-content: center;
   align-items: center;
   gap: 50px;
-  padding: 0 20vw 0 20vw;
+  padding: 0 10vw 0 10vw;
   @media (width < 768px) {
     padding: 0 25px 0 25px;
   }

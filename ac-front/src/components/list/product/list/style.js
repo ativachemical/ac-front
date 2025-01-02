@@ -7,6 +7,7 @@ import {
   Close,
   Less,
   Plus,
+  Download,
 } from "../../../../assets/icons"
 import { BaseIcon } from "../../../../style"
 
@@ -168,6 +169,13 @@ export const PlusIcon = styled(BaseIcon).attrs({
   background-color:var(--accent-color);
 `
 
+export const DownloadIcon = styled(BaseIcon).attrs({
+  as: Download,
+})`
+  fill: var(--text-solid);
+  width: fit-content;
+  height:20px;
+`
 
 export const ImageContent = styled.div`
   display: flex;
@@ -177,3 +185,32 @@ export const ImageContent = styled.div`
   max-width: 150px;
   align-items: center;
 `
+
+export const downloadButton = styled.button`
+  padding: 3px;
+  background: var(--bg-tertiary-color);
+  border-radius:5px;
+  font-size:14px;
+  font-weight:600;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text-solid);
+  border: 2px solid var(--bg-tertiary-color);
+  gap:3px;
+  width: fit-content;
+  cursor:pointer;
+`
+
+export const ContentLinkDownload = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Exibe dois itens por linha */
+  gap: 7px;
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr; /* Para telas menores, coloca um item por linha */
+  }
+`
+
+
+

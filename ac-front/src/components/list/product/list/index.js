@@ -55,14 +55,13 @@ export function ProductList({ type = "table" }) {
   const [products, setProducts] = useState([])
   const [productById, setProductById] = useState(null)
   const [productImageById, setProductImageById] = useState(null)
-  const [downloadLink, setDownloadLink] = useState(null)
   const [isDownloadProductModalOpen, setDownloadProductModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch = useDispatch()
   const segments = useSelector((state) => state.productReducer.segments)
   const [initialLoad, setInitialLoad] = useState(true)
-  const [productId, setProductId] = useState(0)
+  const [getProductId, setProductId] = useState(0)
   
   const refreshProductList = useCallback(async () => {
     setLoading(true)
@@ -99,13 +98,12 @@ export function ProductList({ type = "table" }) {
     setSearchQuery(value)
   }
 
-  const toggleModalDownloadProduct = (e, downloadLink) => {
-    if (e) e.stopPropagation();
-    console.log(downloadLink)
-    setDownloadProductModalOpen(!isDownloadProductModalOpen);
-    setDownloadLink(downloadLink)
-  };
-
+  const toggleModalDownloadProduct = useCallback((e, productId) => {
+    if (e) e.stopPropagation(); // Evita que o clique se propague
+    setProductId(productId); // Atualiza o ID do produto antes de abrir o modal
+    setDownloadProductModalOpen((prevState) => !prevState); // Alterna o estado do modal
+    console.log("toggleModalDownloadProduct", productId);
+  }, []);
 
   const isManualPagination = useSelector(
     (state) => state.productReducer.isManualPagination
@@ -120,7 +118,7 @@ export function ProductList({ type = "table" }) {
       />
 
       {/* modals */}
-      <DownloadProductModal isOpen={isDownloadProductModalOpen} handleModal={toggleModalDownloadProduct} downloadLink={downloadLink}/>
+      <DownloadProductModal isOpen={isDownloadProductModalOpen} handleModal={toggleModalDownloadProduct} productId={getProductId}/>
       <ProductModalById
         productById={productById}
         productImageById={productImageById}
@@ -188,7 +186,7 @@ export function ProductList({ type = "table" }) {
                                             key={idx}
                                             rel="noopener noreferrer"
                                             onClick={
-                                              (e) => toggleModalDownloadProduct(e, download.link)
+                                              (e) => toggleModalDownloadProduct(e, item.id)
                                             }
                                           >
                                             <Styled.DownloadIcon />

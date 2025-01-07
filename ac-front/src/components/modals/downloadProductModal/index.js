@@ -7,33 +7,29 @@ import { InputSimple } from "../../inputs/inputSimple"
 import { Input } from "../../inputs/input"
 import api from "../../../services/ac-api"
 
-
-
-export const sendRequestEmailDownloadProduct = async (
-  username,
-  company,
-  phoneNumber,
-  email,
-  getDownloadLink
-) => {
+export const requestSendEmailDownloadProduct = async (name, company, phoneNumber, email, productId) => {
   try {
+    // Monta o objeto com os dados da requisição
     const requestData = {
-      username: username,
+      username: name,
       company: company,
-      phone_number: phoneNumber,
+      phone_number:phoneNumber,
       email: email,
     };
 
-    // Usa o link absoluto diretamente
-    const response = await api.post(getDownloadLink, requestData);
+    // Faz a requisição POST
+    const response = await api.post(`product/download/${productId}?download_type=pdf`, requestData);
 
+    // Retorna a resposta para quem chamou a função
     return response;
   } catch (error) {
-    console.error("Erro na requisição sendEmailDownloadProduct:", error.message);
+    // Captura e loga erros para ajudar no debug
+    console.error('Erro ao enviar email de download do produto:', error.message);
+
+    // Lança o erro para o chamador tratar
+    throw error;
   }
 };
-
-
 
 export function DownloadProductModal({
   title = "Encaminhar download por email",
@@ -41,16 +37,16 @@ export function DownloadProductModal({
   text = "Para realizar o download informe alguns dados necessários com o email a ser enviado:",
   disableUserSelect = false,
   maxWidth = "400px",
-  downloadLink,
+  productId,
   handleModal,
 }) {
   const [isOpenModal, setIsOpenModal] = useState(isOpen)
   const [alertMessage, setAlertMessage] = useState() // Estado para mensagem de erro
-  const [getDownloadLink, setDownloadLink] = useState(downloadLink) // Estado para mensagem de erro
+  const [getProductId, setProductId] = useState(productId) // Estado para mensagem de erro
 
   useEffect(() => {
-    setDownloadLink(getDownloadLink)
-  }, [getDownloadLink])
+    setProductId(getProductId)
+  }, [getProductId, setProductId])
 
   useEffect(() => {
     setIsOpenModal(isOpen);
@@ -135,20 +131,20 @@ export function DownloadProductModal({
     handleModal()
   }
 
-  const sendEmailDownloadProduct = async (downloadLink) => {
+  const sendEmailDownloadProduct = async () => {
     try {
       const { name, company, phoneNumber, email } = formData;
-
+  
       // Validações
       if (!validateName(name)) {
         setAlertMessage({ message: "Um nome e sobrenome válido por favor", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
-        return; // Interrompe o fluxo
+        return;
       }
       if (!validateCompany(company)) {
         setAlertMessage({ message: "Uma empresa válida por favor", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
-        return; // Interrompe o fluxo
+        return;
       }
       if (!validatePhone(phoneNumber)) {
         setAlertMessage({
@@ -156,46 +152,29 @@ export function DownloadProductModal({
           type: "error",
         });
         setTimeout(() => setAlertMessage(""), 7000);
-        return; // Interrompe o fluxo
+        return;
       }
       if (!validateEmail(email)) {
         setAlertMessage({ message: "Email inválido", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
-        return; // Interrompe o fluxo
+        return;
       }
-
-      // Dados da requisição
-      // const requestData = {
-      //   name: name,
-      //   company: company,
-      //   phoneNumber: phoneNumber,
-      //   email: email,
-      // };
-
-      // // Faz a requisição POST
-      // const response = await api.post(`${downloadLink}`, requestData);
-
-      const response = await sendRequestEmailDownloadProduct(name, company, phoneNumber, email, getDownloadLink);
-      console.log(response.status)
-      // Verifica o sucesso da requisição
+  
+      // Chama a função de envio
+      const response = await requestSendEmailDownloadProduct(name, company, phoneNumber, email, productId);
+  
       if (response.status === 204 || response.status === 201) {
         setAlertMessage({ message: "Email enviado com sucesso!", type: "success" });
+        setTimeout(() => setAlertMessage(""), 7000);
       } else {
         setAlertMessage({ message: "Erro ao enviar email, tente novamente.", type: "error" });
       }
-
-      // Limpa a mensagem após 10 segundos
-      setTimeout(() => setAlertMessage(""), 10000);
-
-      return response.data;
     } catch (error) {
       setAlertMessage({ message: "Erro ao enviar email, tente mais tarde", type: "error" });
       console.error("Erro na requisição sendEmailDownloadProduct:", error.message);
-
-      // Limpa a mensagem após 10 segundos
-      setTimeout(() => setAlertMessage(""), 10000);
     }
   };
+  
 
   return (
     <Styled.BackgroundOutsideModal isOpen={isOpenModal}>
@@ -255,7 +234,7 @@ export function DownloadProductModal({
         }
 
         <Align gap="20px" justify="center">
-          <Button text="Enviar" onClick={() => sendEmailDownloadProduct(downloadLink)} type="primary" />
+          <Button text="Enviar" onClick={() => sendEmailDownloadProduct()} type="primary" />
           <Button text="Cancelar" onClick={toggleModal} type="secondary" />
         </Align>
       </Styled.Modal>

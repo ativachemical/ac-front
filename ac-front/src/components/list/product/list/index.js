@@ -62,7 +62,8 @@ export function ProductList({ type = "table" }) {
   const dispatch = useDispatch()
   const segments = useSelector((state) => state.productReducer.segments)
   const [initialLoad, setInitialLoad] = useState(true)
-
+  const [productId, setProductId] = useState(0)
+  
   const refreshProductList = useCallback(async () => {
     setLoading(true)
     try {
@@ -99,7 +100,8 @@ export function ProductList({ type = "table" }) {
   }
 
   const toggleModalDownloadProduct = (e, downloadLink) => {
-    if (e) e.stopPropagation(); // Apenas chama stopPropagation se o evento existir
+    if (e) e.stopPropagation();
+    console.log(downloadLink)
     setDownloadProductModalOpen(!isDownloadProductModalOpen);
     setDownloadLink(downloadLink)
   };
@@ -125,9 +127,9 @@ export function ProductList({ type = "table" }) {
       />
       {/* modals */}
       {loading ? (
-        <div>Loading...</div>
+        <div>Carregando...</div>
       ) : !products ? (
-        <div>Error loading data.</div>
+        <div>Estamos ajustando, mas logo estará de volta!</div>
       ) : (
         <>
           <Styled.Content>

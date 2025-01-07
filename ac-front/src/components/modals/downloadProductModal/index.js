@@ -9,23 +9,30 @@ import api from "../../../services/ac-api"
 
 
 
-// export const sendEmailDownloadProduct = async (name, company, telephone, email, downloadLink) => {
-//   try {
-//     const requestData = {
-//       name: name,
-//       company: company,
-//       telephone: telephone,
-//       email: email,
-//     }
+export const sendRequestEmailDownloadProduct = async (
+  username,
+  company,
+  phoneNumber,
+  email,
+  getDownloadLink
+) => {
+  try {
+    const requestData = {
+      username: username,
+      company: company,
+      phone_number: phoneNumber,
+      email: email,
+    };
 
-//     // Envia a requisição POST
-//     const response = await api.post(`${downloadLink}`, requestData);
+    // Usa o link absoluto diretamente
+    const response = await api.post(getDownloadLink, requestData);
 
-//     return response.data;
-//   } catch (error) {
-//     console.error('Erro na requisição sendEmailDownloadProduct:', error.message);
-//   }
-// }
+    return response;
+  } catch (error) {
+    console.error("Erro na requisição sendEmailDownloadProduct:", error.message);
+  }
+};
+
 
 
 export function DownloadProductModal({
@@ -39,6 +46,11 @@ export function DownloadProductModal({
 }) {
   const [isOpenModal, setIsOpenModal] = useState(isOpen)
   const [alertMessage, setAlertMessage] = useState() // Estado para mensagem de erro
+  const [getDownloadLink, setDownloadLink] = useState(downloadLink) // Estado para mensagem de erro
+
+  useEffect(() => {
+    setDownloadLink(getDownloadLink)
+  }, [getDownloadLink])
 
   useEffect(() => {
     setIsOpenModal(isOpen);
@@ -52,7 +64,7 @@ export function DownloadProductModal({
   const [formData, setFormData] = useState({
     name: "",
     company: "",
-    telephone: "",
+    phoneNumber: "",
     email: "",
   });
 
@@ -125,7 +137,7 @@ export function DownloadProductModal({
 
   const sendEmailDownloadProduct = async (downloadLink) => {
     try {
-      const { name, company, telephone, email } = formData;
+      const { name, company, phoneNumber, email } = formData;
 
       // Validações
       if (!validateName(name)) {
@@ -138,7 +150,7 @@ export function DownloadProductModal({
         setTimeout(() => setAlertMessage(""), 7000);
         return; // Interrompe o fluxo
       }
-      if (!validatePhone(telephone)) {
+      if (!validatePhone(phoneNumber)) {
         setAlertMessage({
           message: "Telefone inválido. O formato deve ser XX (DDD) 9XXXX-XXXX ou XX 9XXXX-XXXX",
           type: "error",
@@ -147,24 +159,26 @@ export function DownloadProductModal({
         return; // Interrompe o fluxo
       }
       if (!validateEmail(email)) {
-        setAlertMessage({ message: "Email inválido.", type: "error" });
+        setAlertMessage({ message: "Email inválido", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
         return; // Interrompe o fluxo
       }
 
       // Dados da requisição
-      const requestData = {
-        name: name,
-        company: company,
-        telephone: telephone,
-        email: email,
-      };
+      // const requestData = {
+      //   name: name,
+      //   company: company,
+      //   phoneNumber: phoneNumber,
+      //   email: email,
+      // };
 
-      // Faz a requisição POST
-      const response = await api.post(`${downloadLink}`, requestData);
+      // // Faz a requisição POST
+      // const response = await api.post(`${downloadLink}`, requestData);
 
+      const response = await sendRequestEmailDownloadProduct(name, company, phoneNumber, email, getDownloadLink);
+      console.log(response.status)
       // Verifica o sucesso da requisição
-      if (response.status === 200) {
+      if (response.status === 204 || response.status === 201) {
         setAlertMessage({ message: "Email enviado com sucesso!", type: "success" });
       } else {
         setAlertMessage({ message: "Erro ao enviar email, tente novamente.", type: "error" });
@@ -219,8 +233,8 @@ export function DownloadProductModal({
             type="text"
             title="Telefone"
             placeholder="55 11 12345-6789"
-            value={formData.telephone}
-            name="telephone"
+            value={formData.phoneNumber}
+            name="phoneNumber"
             onChange={handleInputChange}
           />
           <Input

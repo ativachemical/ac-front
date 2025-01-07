@@ -11,6 +11,8 @@ import {
 } from "../../../../assets/icons"
 import { BaseIcon } from "../../../../style"
 
+
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -211,6 +213,5 @@ export const ContentLinkDownload = styled.div`
     grid-template-columns: 1fr; /* Para telas menores, coloca um item por linha */
   }
 `
-
 
 

@@ -57,17 +57,30 @@ export function Button({
       htmlFor={htmlFor}
     >
       {isLoading ? (
-        <Styles.ContentIcon type={buttonType}>
-          <Styles.LoadingIcon type={buttonType} />
-        </Styles.ContentIcon>
+        <Styles.ButtonWithIcon>
+          {text &&
+            <>
+              <Styles.SpanText>{text}</Styles.SpanText>
+              <Styles.ContentIcon size='17px' type={buttonType}>
+                <Styles.LoadingIcon type={buttonType} />
+              </Styles.ContentIcon>
+            </>
+          }
+          {!text &&
+            <Styles.ContentIcon size='27px' type={buttonType}>
+              <Styles.LoadingIcon type={buttonType} />
+            </Styles.ContentIcon>
+          }
+        </Styles.ButtonWithIcon>
       ) : (
-        <Align gap={"4px"} alignCenter justify={"center"}>
+        <Styles.ButtonWithIcon>
           {icon && (
             <Styles.ContentIcon type={buttonType}>{icon}</Styles.ContentIcon>
           )}
           {text && <Styles.SpanText>{text}</Styles.SpanText>}
-        </Align>
-      )}
-    </Styles.Button>
+        </Styles.ButtonWithIcon>
+      )
+      }
+    </Styles.Button >
   )
 }

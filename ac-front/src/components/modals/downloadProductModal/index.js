@@ -13,7 +13,7 @@ export const requestSendEmailDownloadProduct = async (name, company, phoneNumber
     const requestData = {
       username: name,
       company: company,
-      phone_number:phoneNumber,
+      phone_number: phoneNumber,
       email: email,
     };
 
@@ -40,13 +40,21 @@ export function DownloadProductModal({
   productId,
   handleModal,
 }) {
-  const [isOpenModal, setIsOpenModal] = useState(isOpen)
-  const [alertMessage, setAlertMessage] = useState() // Estado para mensagem de erro
-  const [getProductId, setProductId] = useState(productId) // Estado para mensagem de erro
+  const [isOpenModal, setIsOpenModal] = useState(isOpen);
+  const [alertMessage, setAlertMessage] = useState();
+  const [getProductId, setProductId] = useState(productId);
+  const [isLoading, setIsHideForm] = useState(false); // Estado de carregamento
+
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    phoneNumber: "",
+    email: "",
+  });
 
   useEffect(() => {
-    setProductId(getProductId)
-  }, [getProductId, setProductId])
+    setProductId(getProductId);
+  }, [getProductId]);
 
   useEffect(() => {
     setIsOpenModal(isOpen);
@@ -56,13 +64,6 @@ export function DownloadProductModal({
       document.body.style.overflow = "auto";
     }
   }, [isOpen, isOpenModal]);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    company: "",
-    phoneNumber: "",
-    email: "",
-  });
 
   const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -125,25 +126,27 @@ export function DownloadProductModal({
     );
   };
 
-
   const toggleModal = () => {
-    setIsOpenModal(!isOpenModal)
-    handleModal()
-  }
+    setIsOpenModal(!isOpenModal);
+    handleModal();
+  };
 
   const sendEmailDownloadProduct = async () => {
     try {
+      setIsHideForm(false);
       const { name, company, phoneNumber, email } = formData;
-  
+
       // Validações
       if (!validateName(name)) {
         setAlertMessage({ message: "Um nome e sobrenome válido por favor", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
+        setIsHideForm(false);
         return;
       }
       if (!validateCompany(company)) {
         setAlertMessage({ message: "Uma empresa válida por favor", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
+        setIsHideForm(false);
         return;
       }
       if (!validatePhone(phoneNumber)) {
@@ -157,33 +160,31 @@ export function DownloadProductModal({
       if (!validateEmail(email)) {
         setAlertMessage({ message: "Email inválido", type: "error" });
         setTimeout(() => setAlertMessage(""), 7000);
+        setIsHideForm(false);
         return;
       }
-  
-      // Chama a função de envio
+
+      
+      setIsHideForm(true);
       const response = await requestSendEmailDownloadProduct(name, company, phoneNumber, email, productId);
-  
       if (response.status === 204 || response.status === 201) {
         setAlertMessage({ message: "Email enviado com sucesso!", type: "success" });
-        setTimeout(() => setAlertMessage(""), 7000);
+        setTimeout(() => toggleModal(), 7000);
+        setTimeout(() => setIsHideForm(false), 7000);
       } else {
         setAlertMessage({ message: "Erro ao enviar email, tente novamente.", type: "error" });
       }
     } catch (error) {
       setAlertMessage({ message: "Erro ao enviar email, tente mais tarde", type: "error" });
       console.error("Erro na requisição sendEmailDownloadProduct:", error.message);
+    } finally {
+      setTimeout(() => setAlertMessage(""), 7000);
     }
   };
-  
 
   return (
     <Styled.BackgroundOutsideModal isOpen={isOpenModal}>
-      <Styled.Modal
-        isOpen={isOpenModal}
-        disableUserSelect={disableUserSelect}
-        maxWidth={maxWidth}
-        className="modal-content"
-      >
+      <Styled.Modal isOpen={isOpenModal} disableUserSelect={disableUserSelect} maxWidth={maxWidth}>
         <Styled.SpaceTop>
           <Text text={title} bold color="var(--text-solid)" size="lg" />
           <Align column alignEnd gap="10px" width="auto">
@@ -192,50 +193,51 @@ export function DownloadProductModal({
         </Styled.SpaceTop>
         <Text text={text} />
         <Styled.FormContent>
-          <Input
-            type="text"
-            title="Nome Completo"
-            placeholder="Nome Exemplo"
-            value={formData.name}
-            name="name"
-            onChange={handleInputChange}
-          />
-          <Input
-            type="text"
-            title="Empresa"
-            placeholder="Empresa Exemplo"
-            value={formData.company}
-            name="company"
-            onChange={handleInputChange}
-          />
-          <Input
-            type="text"
-            title="Telefone"
-            placeholder="55 11 12345-6789"
-            value={formData.phoneNumber}
-            name="phoneNumber"
-            onChange={handleInputChange}
-          />
-          <Input
-            type="text"
-            title="Email"
-            placeholder="email@example.com.br"
-            value={formData.email}
-            name="email"
-            onChange={handleInputChange}
-          />
+          {!isLoading && <>
+            <Input
+              type="text"
+              title="Nome Completo"
+              placeholder="Nome Exemplo"
+              value={formData.name}
+              name="name"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="text"
+              title="Empresa"
+              placeholder="Empresa Exemplo"
+              value={formData.company}
+              name="company"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="text"
+              title="Telefone"
+              placeholder="55 11 12345-6789"
+              value={formData.phoneNumber}
+              name="phoneNumber"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="text"
+              title="Email"
+              placeholder="email@example.com.br"
+              value={formData.email}
+              name="email"
+              onChange={handleInputChange}
+            />
+          </>}
         </Styled.FormContent>
 
-        {/* Exibição da mensagem de erro */}
-        {alertMessage &&
+        {alertMessage && (
           <Styled.AlertTextContent>
             <Styled.AlertText type={alertMessage.type}>{alertMessage.message}</Styled.AlertText>
           </Styled.AlertTextContent>
-        }
+        )}
 
         <Align gap="20px" justify="center">
-          <Button text="Enviar" onClick={() => sendEmailDownloadProduct()} type="primary" />
-          <Button text="Cancelar" onClick={toggleModal} type="secondary" />
+          <Button text="Enviar" onClick={() => sendEmailDownloadProduct()} type="primary" disabled={isLoading} />
+          <Button text="Cancelar" onClick={toggleModal} type="secondary" disabled={isLoading} />
         </Align>
       </Styled.Modal>
     </Styled.BackgroundOutsideModal>

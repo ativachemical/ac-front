@@ -102,7 +102,7 @@ export function Header({ selectedItem }) {
       <Styled.HeaderNav isOpenMenu={isOpenMenu}>
         <Styled.Flex>
           <Align flex alignCenter>
-            <Styled.NavLinkItem to="/access">
+            <Styled.NavLinkItem to="/">
               <Styled.ImgLogoInline src={InlineLogo} />
             </Styled.NavLinkItem>
             {userType === "admin" && (

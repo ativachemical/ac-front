@@ -3,6 +3,7 @@ import * as Styled from "./style";
 import { Text } from "../../text";
 import { Align } from "../../../style";
 import { useSelector } from "react-redux";
+import { DownloadButton } from "../../buttons/downloadButton";
 
 export function BasicModal({
   title,
@@ -19,6 +20,7 @@ export function BasicModal({
   handleRestore,
   isDeleted = false,
   isClickOutsideClose = false,
+  toggleModalButtonDownload
 }) {
   const [, setIsEdit] = useState(initialIsEdit);
   const [handleEdit] = useState(initialHandleEdit);
@@ -42,18 +44,18 @@ export function BasicModal({
       return document.addEventListener("mouseup", handleClickOutside);
     }
     return document.removeEventListener("mouseup", handleClickOutside);
-    
+
   }, [isOpen, isClickOutsideClose]);
 
   // Adiciona/Remove scroll
   useEffect(() => {
     if (isOpen && fixed) {
-      document.body.style.overflow = "hidden"; 
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = "auto";
     }
     return () => {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = "auto";
     };
   }, [isOpen, fixed]);
 
@@ -72,15 +74,22 @@ export function BasicModal({
       >
         <Styled.SpaceTop>
           <Text text={title} bold color={"var(--text-solid)"} size={"lg"} />
-          <Align column alignEnd gap={"10px"} width={"auto"}>
-            <Styled.CloseIcon onClick={handleModal} />
-            {userType === "admin" && <Styled.EditIcon onClick={toggleEdit} />}
-            {!isDeleted && userType === "admin" && (
-              <Styled.DeleteIcon onClick={handleDelete} />
-            )}
-            {isDeleted && userType === "admin" && (
-              <Styled.RestoreIcon onClick={handleRestore} />
-            )}
+          <Align gap={"10px"} width={"auto"}>
+            <DownloadButton
+              idx={1}
+              onClick={() => toggleModalButtonDownload()}
+              text={'PDF'}
+            />
+            <Align column alignEnd gap={"10px"} width={"auto"}>
+              <Styled.CloseIcon onClick={handleModal} />
+              {userType === "admin" && <Styled.EditIcon onClick={toggleEdit} />}
+              {!isDeleted && userType === "admin" && (
+                <Styled.DeleteIcon onClick={handleDelete} />
+              )}
+              {isDeleted && userType === "admin" && (
+                <Styled.RestoreIcon onClick={handleRestore} />
+              )}
+            </Align>
           </Align>
         </Styled.SpaceTop>
         {children}

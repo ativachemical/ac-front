@@ -164,11 +164,11 @@ export function DownloadProductModal({
         return;
       }
 
-      
+
       setIsHideForm(true);
       const response = await requestSendEmailDownloadProduct(name, company, phoneNumber, email, productId);
       if (response.status === 204 || response.status === 201) {
-        setAlertMessage({ message: "Email enviado com sucesso!", type: "success" });
+        setAlertMessage({ message: "Seu email chegará em breve!", type: "success" });
         setTimeout(() => toggleModal(), 7000);
         setTimeout(() => setIsHideForm(false), 7000);
       } else {

@@ -17,7 +17,8 @@ import { getLocalStorage, setLocalStorage } from "../../../utils/index.js"
 
 export function SearchInput({
   placeholder = "Buscar",
-  onSearchClick,
+  onProductSearchClick,
+  onProductDownloadHistorySearchClick,
   onInputChange,
 }) {
   const dispatch = useDispatch()
@@ -42,7 +43,7 @@ export function SearchInput({
   // }
 
   useEffect(() => {
-    if(userType !== "admin"){
+    if (userType !== "admin") {
       setLocalStorage("product_filter_is_deleted", false)
     }
   }, [])
@@ -88,18 +89,26 @@ export function SearchInput({
               onChange={handleInputChange}
               value={searchInput}
             />
-            
-              <Button 
-                icon={<Styled.FilterIcon />}
-                onClick={handleFilterClick}
-                type={"lite"}
-              />
+
+            <Button
+              icon={<Styled.FilterIcon />}
+              onClick={handleFilterClick}
+              type={"lite"}
+            />
 
             <Button
               icon={<Styled.SearchIcon />}
-              onClick={onSearchClick}
+              onClick={onProductSearchClick}
               type={"lite"}
             />
+
+            {userType === "admin" && (
+              <Button
+                icon={<Styled.SearchQueryIcon />}
+                onClick={onProductDownloadHistorySearchClick}
+                type={"lite"}
+              />
+            )}
 
             {userType === "admin" && (
               <Button

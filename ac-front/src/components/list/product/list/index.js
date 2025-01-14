@@ -4,10 +4,164 @@ import { ProductCard } from "../card"
 import { Gap, ScrollX } from "../../../../style"
 import { Pagination } from "../../../pagination"
 import { useSelector, useDispatch } from "react-redux"
-import { DownloadProductModal, ProductModalById, SearchInput } from "../../../index"
+import { DownloadButton, DownloadProductCardList, DownloadProductModal, ProductModalById, SearchInput } from "../../../index"
 import { toggleIsModalByIdOpen } from "../../../../redux/product/slice"
 import api from "../../../../services/ac-api"
 import { getLocalStorage } from "../../../../utils"
+
+const list = [
+  {
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    company: 'Empresa X',
+    phone_number: '(11) 98765-4321',
+    product_id: '12345',
+    product_name: 'Produto A',
+    created_at: '2025-01-10 14:20:30.123',
+  },
+  {
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    company: 'Empresa Y',
+    phone_number: '(21) 99876-5432',
+    product_id: '67890',
+    product_name: 'Produto B',
+    created_at: '2025-01-11 09:15:05.456',
+  },
+  {
+    name: 'Carlos Souza',
+    email: 'carlos.souza@email.com',
+    company: 'Empresa Z',
+    phone_number: '(31) 99887-6543',
+    product_id: '11223',
+    product_name: 'Produto C',
+    created_at: '2025-01-12 11:30:45.789',
+  },
+  {
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    company: 'Empresa X',
+    phone_number: '(11) 98765-4321',
+    product_id: '12345',
+    product_name: 'Produto A',
+    created_at: '2025-01-10 14:20:30.123',
+  },
+  {
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    company: 'Empresa Y',
+    phone_number: '(21) 99876-5432',
+    product_id: '67890',
+    product_name: 'Produto B',
+    created_at: '2025-01-11 09:15:05.456',
+  },
+  {
+    name: 'Carlos Souza',
+    email: 'carlos.souza@email.com',
+    company: 'Empresa Z',
+    phone_number: '(31) 99887-6543',
+    product_id: '11223',
+    product_name: 'Produto C',
+    created_at: '2025-01-12 11:30:45.789',
+  },
+  {
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    company: 'Empresa X',
+    phone_number: '(11) 98765-4321',
+    product_id: '12345',
+    product_name: 'Produto A',
+    created_at: '2025-01-10 14:20:30.123',
+  },
+  {
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    company: 'Empresa Y',
+    phone_number: '(21) 99876-5432',
+    product_id: '67890',
+    product_name: 'Produto B',
+    created_at: '2025-01-11 09:15:05.456',
+  },
+  {
+    name: 'Carlos Souza',
+    email: 'carlos.souza@email.com',
+    company: 'Empresa Z',
+    phone_number: '(31) 99887-6543',
+    product_id: '11223',
+    product_name: 'Produto C',
+    created_at: '2025-01-12 11:30:45.789',
+  },
+  {
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    company: 'Empresa X',
+    phone_number: '(11) 98765-4321',
+    product_id: '12345',
+    product_name: 'Produto A',
+    created_at: '2025-01-10 14:20:30.123',
+  },
+  {
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    company: 'Empresa Y',
+    phone_number: '(21) 99876-5432',
+    product_id: '67890',
+    product_name: 'Produto B',
+    created_at: '2025-01-11 09:15:05.456',
+  },
+  {
+    name: 'Carlos Souza',
+    email: 'carlos.souza@email.com',
+    company: 'Empresa Z',
+    phone_number: '(31) 99887-6543',
+    product_id: '11223',
+    product_name: 'Produto C',
+    created_at: '2025-01-12 11:30:45.789',
+  },
+  {
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    company: 'Empresa X',
+    phone_number: '(11) 98765-4321',
+    product_id: '12345',
+    product_name: 'Produto A',
+    created_at: '2025-01-10 14:20:30.123',
+  },
+  {
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    company: 'Empresa Y',
+    phone_number: '(21) 99876-5432',
+    product_id: '67890',
+    product_name: 'Produto B',
+    created_at: '2025-01-11 09:15:05.456',
+  },
+  {
+    name: 'Carlos Souza',
+    email: 'carlos.souza@email.com',
+    company: 'Empresa Z',
+    phone_number: '(31) 99887-6543',
+    product_id: '11223',
+    product_name: 'Produto C',
+    created_at: '2025-01-12 11:30:45.789',
+  },
+];
+
+export const getProductDownloadHistorySearch = async (search, userToken) => {
+  try {
+    const requestData = {
+      search: search,
+    }
+    const response = await api.post("/product/download-history",requestData, {
+      headers: {
+        Authorization: `Bearer ${userToken}`, // Passa o token JWT no cabeçalho
+      },
+    })
+    return response.data // Adjust according to your API response structure
+  } catch (error) {
+    console.error("Error making the API request:", error)
+  }
+}
 
 export const getProductList = async (segments, isActive, search) => {
   try {
@@ -51,7 +205,7 @@ export const getProductImageById = async (id) => {
   }
 }
 
-export function ProductList({ type = "table" }) {
+export function ProductList() {
   const [products, setProducts] = useState([])
   const [productById, setProductById] = useState(null)
   const [productImageById, setProductImageById] = useState(null)
@@ -62,18 +216,38 @@ export function ProductList({ type = "table" }) {
   const segments = useSelector((state) => state.productReducer.segments)
   const [initialLoad, setInitialLoad] = useState(true)
   const [getProductId, setProductId] = useState(0)
-  
+  const [getTypeList, setTypeList] = useState('table')
+
+  const userToken = useSelector((state) => state.userReducer.userToken)
+
   const refreshProductList = useCallback(async () => {
     setLoading(true)
     try {
       const data = await getProductList(segments, false, searchQuery)
       setProducts(data)
       setLoading(false)
+      setTypeList('table')
     } catch (error) {
       console.error("Error fetching product list:", error)
       setLoading(false)
     }
   }, [segments, searchQuery])
+
+  const fetchProductDownloadHistory = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getProductDownloadHistorySearch(searchQuery, userToken);
+      setProducts(data);
+      console.log(data);
+      setLoading(false);
+      setTypeList('download_history');
+    } catch (error) {
+      console.error("Error fetching product list:", error);
+      setLoading(false);
+    }
+  }, [searchQuery, userToken]);
+  
+  
 
   useEffect(() => {
     if (initialLoad) {
@@ -113,7 +287,8 @@ export function ProductList({ type = "table" }) {
   return (
     <>
       <SearchInput
-        onSearchClick={refreshProductList}
+        onProductSearchClick={refreshProductList}
+        onProductDownloadHistorySearchClick={fetchProductDownloadHistory}
         onInputChange={handleInputChange}
       />
 
@@ -131,7 +306,7 @@ export function ProductList({ type = "table" }) {
       ) : (
         <>
           <Styled.Content>
-            {type === "table" && (
+            {getTypeList === "table" && (
               <ScrollX>
                 <Styled.Table>
                   <thead>
@@ -182,16 +357,11 @@ export function ProductList({ type = "table" }) {
                                     return (
                                       <Styled.ContentLinkDownload>
                                         {row.map((download, idx) => (
-                                          <Styled.downloadButton
-                                            key={idx}
-                                            rel="noopener noreferrer"
-                                            onClick={
-                                              (e) => toggleModalDownloadProduct(e, item.id)
-                                            }
-                                          >
-                                            <Styled.DownloadIcon />
-                                            {download.type.toUpperCase()}
-                                          </Styled.downloadButton>
+                                          <DownloadButton 
+                                            idx={idx} 
+                                            onClick={(e) => toggleModalDownloadProduct(e, item.id)}
+                                            text={download.type.toUpperCase()}
+                                          />
                                         ))}
                                       </Styled.ContentLinkDownload>
                                     );
@@ -211,12 +381,15 @@ export function ProductList({ type = "table" }) {
                 </Styled.Table>
               </ScrollX>
             )}
-            {type === "card" && (
+            {getTypeList === "card" && (
               <>
                 {products.items.map((item, index) => (
                   <ProductCard key={index} list={item} />
                 ))}
               </>
+            )}
+            {getTypeList === "download_history" && (
+              <DownloadProductCardList list={products}/>
             )}
             {isManualPagination && (
               <Pagination
@@ -227,6 +400,8 @@ export function ProductList({ type = "table" }) {
                 }
               />
             )}
+
+
           </Styled.Content>
         </>
       )}

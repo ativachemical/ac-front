@@ -52,3 +52,4 @@ export { default as DirectImportationImgText } from "./img/directImportationImgT
 export { default as Br } from "./img/flags/br.png"
 export { default as En } from "./img/flags/en.png"
 export { default as Es } from "./img/flags/es.png"
+export { default as DefaultUser } from "./img/defaultUser.png"

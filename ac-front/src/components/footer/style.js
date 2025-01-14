@@ -96,7 +96,7 @@ export const Link = styled.p`
   max-width: 200px;
   opacity: 0.9;
   gap: 20px;
-  word-break: break-all;
+  word-break: break-word;
   cursor: pointer;
   @media( width < 768px){
     max-width: none;

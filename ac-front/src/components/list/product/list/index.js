@@ -4,7 +4,7 @@ import { ProductCard } from "../card"
 import { Gap, ScrollX } from "../../../../style"
 import { Pagination } from "../../../pagination"
 import { useSelector, useDispatch } from "react-redux"
-import { DownloadButton, DownloadProductCardList, DownloadProductModal, ProductModalById, SearchInput } from "../../../index"
+import { DownloadButton, DownloadProductCardList, DownloadProductModal, DownloadProductTable, ProductModalById, SearchInput } from "../../../index"
 import { toggleIsModalByIdOpen } from "../../../../redux/product/slice"
 import api from "../../../../services/ac-api"
 import { getLocalStorage } from "../../../../utils"
@@ -389,7 +389,8 @@ export function ProductList() {
               </>
             )}
             {getTypeList === "download_history" && (
-              <DownloadProductCardList list={products}/>
+              // <DownloadProductCardList list={products}/>
+              <DownloadProductTable list={products}/>
             )}
             {isManualPagination && (
               <Pagination

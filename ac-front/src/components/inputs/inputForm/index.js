@@ -14,8 +14,8 @@ export function InputForm({ type, name, placeholder, value, onChange }) {
     <Styles.Content>
       {name === "user" && <Styles.UserIcon />}
       {name === "email" && <Styles.EmailIcon />}
-      {name === "password" && !isShowPassword && <Styles.LockIcon onClick={handlesetIsShowPassword} />}
-      {name === "password" && isShowPassword && <Styles.LockOpenIcon onClick={handlesetIsShowPassword} />}
+      {name === "password" && !isShowPassword && <Styles.EyeHideIcon onClick={handlesetIsShowPassword} />}
+      {name === "password" && isShowPassword && <Styles.EyeIcon onClick={handlesetIsShowPassword} />}
       <Styles.Input
         type={inputType}
         name={name}

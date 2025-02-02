@@ -1,14 +1,15 @@
 import styled from 'styled-components'
-import {User, Email, Lock, LockOpen} from '../../../assets/icons/index'
+import { User, Email, Eye, EyeHide } from '../../../assets/icons/index'
 
 export const Input = styled.input`
 background-color: var(--bg-secondary-color);
 border:2px solid var(--bg-secondary-color);
-padding: 7px 40px;
+padding: 7px 20px 7px 40px;
 color: var(--text-solid);
 border-radius:10px;
 font-size:15px;
-text-align:center;
+width: 100%;
+/* text-align:center; */
 
 &::placeholder{
     color:var(--text-color);
@@ -34,16 +35,15 @@ export const EmailIcon = styled(Email)`
     position: absolute;
 `
 
-export const LockIcon = styled(Lock)`
+export const EyeIcon = styled(Eye)`
     margin-left:10px;
     position: absolute;
     cursor: pointer;
 `
-export const LockOpenIcon = styled(LockOpen)`
+export const EyeHideIcon = styled(EyeHide)`
     margin-left:10px;
     position: absolute;
     cursor: pointer;
-    rotate:20deg;
 `
 
 export const Content = styled.div`

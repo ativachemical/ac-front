@@ -13,7 +13,8 @@ export function Button({
   type,
   color,
   response,
-  htmlFor
+  htmlFor,
+  disabled = false
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [buttonType, setButtonType] = useState(type)
@@ -51,7 +52,7 @@ export function Button({
       borderColor={borderColor}
       size={size}
       onClick={isLoading ? null : handleClick}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       type={buttonType} // Use buttonType instead of type here
       color={color}
       htmlFor={htmlFor}

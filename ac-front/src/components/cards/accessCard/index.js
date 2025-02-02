@@ -36,7 +36,6 @@ export function AccessCard() {
 
   const actionLogin = async () => {
     if (!recaptchaToken) {
-      alert("Por favor, complete o reCAPTCHA antes de continuar.");
       return;
     }
 

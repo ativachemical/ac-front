@@ -1,5 +1,7 @@
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { StyledSpace } from "../../text/style";
+import * as Styled from "./style";
 
 export function RecaptchaV2({ onVerify }) {
     const [token, setToken] = useState("");
@@ -10,12 +12,12 @@ export function RecaptchaV2({ onVerify }) {
     };
 
     return (
-        <div>
+        <Styled.Content>
             <ReCAPTCHA
-                sitekey={process.env.REACT_APP_AC_BACK} // Substituir pelo seu site key
+                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY} // Substituir pelo seu site key
                 onChange={handleRecaptchaChange}
             />
-            <p>reCAPTCHA Token: {token ? "Gerado" : "Não Gerado"}</p>
-        </div>
+            {/* <p>reCAPTCHA Token: {token ? "Gerado" : "Não Gerado"}</p> */}
+        </Styled.Content>
     );
 }

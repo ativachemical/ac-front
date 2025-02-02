@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, InputForm } from "../../index"
+import { Button, InputForm, RecaptchaV2 } from "../../index"
 import { useNavigate } from "react-router-dom"
 import { api } from "../../../services/ac-api"
 import * as Styles from "./style"
@@ -23,41 +23,47 @@ export function AccessCard() {
   const [password, setPassword] = useState("")
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginError, setLoginError] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState("");
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
-  const loginOn = () => {
-    setIsRegister(false)
-  }
+  const handleVerify = (token) => {
+    setRecaptchaToken(token);
+  };
 
-  const loginOff = () => {
-    setIsRegister(true)
-  }
+  const loginOn = () => setIsRegister(false);
+  const loginOff = () => setIsRegister(true);
 
   const actionLogin = async () => {
+    if (!recaptchaToken) {
+      alert("Por favor, complete o reCAPTCHA antes de continuar.");
+      return;
+    }
+
     try {
       const requestData = {
         email: email,
         password: password,
-      }
-      const response = await api.post("/auth/login", requestData)
+        recaptchaToken: recaptchaToken, // Envia o token na requisição
+      };
+      const response = await api.post("/auth/login", requestData);
 
       if (response.data) {
-        setLoginSuccess(true)
-        dispatch(setUserType("admin"))
-        dispatch(saveUserToken(response.data.accessToken))
+        setLoginSuccess(true);
+        dispatch(setUserType("admin"));
+        dispatch(saveUserToken(response.data.accessToken));
+
         setTimeout(() => {
-          setLoginSuccess(false) //remove after 1s
-          navigate("/products")
-        }, 500)
+          setLoginSuccess(false);
+          navigate("/products");
+        }, 500);
       }
     } catch (error) {
-      setLoginError(true)
-      setTimeout(() => setLoginError(false), 1000) //remove after 1s
-      console.error("Error making the API request:", error)
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 1000);
+      console.error("Erro ao fazer login:", error);
     }
-  }
+  };
 
   return (
     <Styles.Card>
@@ -88,10 +94,14 @@ export function AccessCard() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {/* reCAPTCHA */}
+            <RecaptchaV2 onVerify={handleVerify} />
+            {/* Botão de login desativado até resolver o reCAPTCHA */}
             <Button
               text="Login"
               onClick={actionLogin}
-              type={"primary"}
+              type="primary"
+              disabled={!recaptchaToken} // Só habilita se tiver um token válido
             />
           </>
         )}

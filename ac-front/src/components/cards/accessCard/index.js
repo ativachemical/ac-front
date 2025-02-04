@@ -5,6 +5,7 @@ import { api } from "../../../services/ac-api"
 import * as Styles from "./style"
 import { useDispatch } from "react-redux"
 import { saveUserToken, setUserType } from "../../../redux/user/slice"
+import { verifyRecaptcha } from "../../recaptcha/recaptchaV2/service"
 
 function test() {
   return async () => {
@@ -28,7 +29,8 @@ export function AccessCard() {
   const navigate = useNavigate()
 
   const handleVerify = (token) => {
-    setRecaptchaToken(token);
+    console.log("Token do reCAPTCHA recebido:", token); // Verifique se o token está correto
+    setRecaptchaToken(token); // Atualiza o estado com o token
   };
 
   const loginOn = () => setIsRegister(false);
@@ -36,15 +38,19 @@ export function AccessCard() {
 
   const actionLogin = async () => {
     if (!recaptchaToken) {
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 1000);
       return;
     }
 
     try {
       const requestData = {
-        email: email,
-        password: password,
-        recaptchaToken: recaptchaToken, // Envia o token na requisição
+        email,
+        password,
+        rechaptchaToken: recaptchaToken, // Corrigido para corresponder ao backend
+        rechaptchaAction: "login", // Corrigido para corresponder ao backend
       };
+
       const response = await api.post("/auth/login", requestData);
 
       if (response.data) {

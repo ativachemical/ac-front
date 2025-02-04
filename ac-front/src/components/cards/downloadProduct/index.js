@@ -10,16 +10,16 @@ export function DownloadProductCard({
     phone_number = "(nenhum)",
     product_id = "(nenhum)",
     product_name = "(nenhum)",
-    created_at = "2025-01-13 18:32:14.486",
+    created_at = new Date(),
     isBorderActive = false,
 }) {
     return (
         <Styled.Card isBorderActive={isBorderActive}>
 
-                <Styled.Gap>
-                    <Styled.ImgDriver src={DefaultUser} />
-                    <Text text={name} size="M" />
-                </Styled.Gap>
+            <Styled.Gap>
+                <Styled.ImgDriver src={DefaultUser} />
+                <Text text={name} size="M" />
+            </Styled.Gap>
 
             <div>
                 <Styled.Flex>

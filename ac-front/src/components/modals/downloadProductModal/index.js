@@ -287,7 +287,7 @@ export function DownloadProductModal({
         )}
 
         <Align gap="20px" justify="center">
-          <Button text="Enviar" onClick={() => sendEmailDownloadProduct()} type="primary" disabled={isLoading || !recaptchaToken} />
+          <Button text="Enviar" onClick={() => sendEmailDownloadProduct()} type="primary" disabled={isLoading} />
           <Button text="Cancelar" onClick={toggleModal} type="secondary" disabled={isLoading} />
         </Align>
       </Styled.Modal>

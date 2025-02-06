@@ -196,6 +196,12 @@ export function DownloadProductModal({
         setIsHideForm(false);
         return;
       }
+      if (!recaptchaToken) {
+        setAlertMessage({ message: "reCAPTCHA inválido", type: "error" });
+        setTimeout(() => setAlertMessage(""), 7000);
+        setIsHideForm(false);
+        return;
+      }
 
 
       setIsHideForm(true);

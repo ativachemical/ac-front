@@ -214,12 +214,15 @@ export function DownloadProductModal({
         setTimeout(() => setIsHideForm(false), 7000);
       } else {
         setAlertMessage({ message: "Erro ao enviar email, tente novamente.", type: "error" });
+        setTimeout(() => toggleModal(), 7000);
+        setTimeout(() => setIsHideForm(false), 7000);
       }
     } catch (error) {
       setAlertMessage({ message: "Erro ao enviar email, tente mais tarde", type: "error" });
       console.error("Erro na requisição sendEmailDownloadProduct:", error.message);
     } finally {
       setTimeout(() => setAlertMessage(""), 7000);
+      setTimeout(() => setIsHideForm(false), 7000);
     }
   };
 

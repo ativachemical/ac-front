@@ -6,8 +6,9 @@ import { Button } from "../../buttons/button"
 import { InputSimple } from "../../inputs/inputSimple"
 import { Input } from "../../inputs/input"
 import api from "../../../services/ac-api"
+import { RecaptchaV2 } from "../../recaptcha/recaptchaV2"
 
-export const requestSendEmailDownloadProduct = async (name, company, phoneNumber, email, productId) => {
+export const requestSendEmailDownloadProduct = async (name, company, phoneNumber, email, productId, recaptchaToken, recaptchaClientIp) => {
   try {
     // Monta o objeto com os dados da requisição
     const requestData = {
@@ -15,6 +16,8 @@ export const requestSendEmailDownloadProduct = async (name, company, phoneNumber
       company: company,
       phone_number: phoneNumber,
       email: email,
+      recaptchaToken: recaptchaToken,
+      recaptchaClientIp: recaptchaClientIp
     };
 
     // Faz a requisição POST
@@ -44,17 +47,41 @@ export function DownloadProductModal({
   const [alertMessage, setAlertMessage] = useState();
   const [getProductId, setProductId] = useState(productId);
   const [isLoading, setIsHideForm] = useState(false); // Estado de carregamento
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  const [clientIp, setClientIp] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     company: "",
     phoneNumber: "",
     email: "",
+    productId: productId,
+    recaptchaToken: recaptchaToken,
+    recaptchaClientIp: clientIp,
   });
+
+  const handleVerify = (token) => {
+    console.log("Token do reCAPTCHA recebido:", token); // Verifique se o token está correto
+    setRecaptchaToken(token); // Atualiza o estado com o token
+  };
 
   useEffect(() => {
     setProductId(getProductId);
   }, [getProductId]);
+
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const response = await fetch("https://api64.ipify.org?format=json");
+        const data = await response.json();
+        setClientIp(data.ip);
+      } catch (error) {
+        console.error("Erro ao obter o IP:", error);
+      }
+    };
+
+    fetchIp();
+  }, []);
 
   useEffect(() => {
     setIsOpenModal(isOpen);
@@ -136,6 +163,12 @@ export function DownloadProductModal({
       setIsHideForm(false);
       const { name, company, phoneNumber, email } = formData;
 
+      const updatedFormData = {
+        ...formData,
+        recaptchaToken: recaptchaToken,  // Atualizando com o token correto
+        recaptchaClientIp: clientIp,     // Atualizando com o IP do cliente
+      };
+
       // Validações
       if (!validateName(name)) {
         setAlertMessage({ message: "Um nome e sobrenome válido por favor", type: "error" });
@@ -166,7 +199,15 @@ export function DownloadProductModal({
 
 
       setIsHideForm(true);
-      const response = await requestSendEmailDownloadProduct(name, company, phoneNumber, email, productId);
+      const response = await requestSendEmailDownloadProduct(
+        updatedFormData.name,
+        updatedFormData.company,
+        updatedFormData.phoneNumber,
+        updatedFormData.email,
+        productId,
+        updatedFormData.recaptchaToken,
+        updatedFormData.recaptchaClientIp
+      );
       if (response.status === 204 || response.status === 201) {
         setAlertMessage({ message: "Seu email chegará em breve!", type: "success" });
         setTimeout(() => toggleModal(), 7000);
@@ -226,6 +267,7 @@ export function DownloadProductModal({
               name="email"
               onChange={handleInputChange}
             />
+            <RecaptchaV2 onVerify={handleVerify} />
           </>}
         </Styled.FormContent>
 

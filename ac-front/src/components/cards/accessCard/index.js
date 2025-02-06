@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, InputForm, RecaptchaV2 } from "../../index"
 import { useNavigate } from "react-router-dom"
 import { api } from "../../../services/ac-api"
@@ -25,6 +25,7 @@ export function AccessCard() {
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginError, setLoginError] = useState(false)
   const [recaptchaToken, setRecaptchaToken] = useState("");
+  const [clientIp, setClientIp] = useState("");
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -36,7 +37,23 @@ export function AccessCard() {
   const loginOn = () => setIsRegister(false);
   const loginOff = () => setIsRegister(true);
 
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const response = await fetch("https://api64.ipify.org?format=json");
+        const data = await response.json();
+        setClientIp(data.ip);
+      } catch (error) {
+        console.error("Erro ao obter o IP:", error);
+      }
+    };
+
+    fetchIp();
+  }, []);
+
   const actionLogin = async () => {
+    console.log("Token antes da validação:", recaptchaToken);
+
     if (!recaptchaToken) {
       setLoginError(true);
       setTimeout(() => setLoginError(false), 1000);
@@ -45,10 +62,10 @@ export function AccessCard() {
 
     try {
       const requestData = {
-        email,
-        password,
-        rechaptchaToken: recaptchaToken, // Corrigido para corresponder ao backend
-        rechaptchaAction: "login", // Corrigido para corresponder ao backend
+        email: email,
+        password: password,
+        recaptchaToken: recaptchaToken,
+        recaptchaClientIp: clientIp, // Agora enviando o IP do usuário
       };
 
       const response = await api.post("/auth/login", requestData);
@@ -69,6 +86,8 @@ export function AccessCard() {
       console.error("Erro ao fazer login:", error);
     }
   };
+
+
 
   return (
     <Styles.Card>

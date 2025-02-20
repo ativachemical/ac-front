@@ -97,12 +97,45 @@ export function Header({ selectedItem }) {
     setSelectedPointIndex(index);
   }
 
+  // Função para rolar a página dependendo da rota
+  function handleScroll(item) {
+    setTimeout(() => {
+      switch (item) {
+        case "/about-us":
+          const aboutUsElement = document.getElementById("main-segments");
+          if (aboutUsElement) {
+            const topPos = aboutUsElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: topPos - 150, behavior: "smooth" });
+          }
+          break;
+    
+        case "/products":
+          const productsElement = document.getElementById("products-list");
+          if (productsElement) {
+            const topPos = productsElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: topPos - 150, behavior: "smooth" });
+          }
+          break;
+    
+        case "/services":
+          const servicesElement = document.getElementById("providing-solutions");
+          if (servicesElement) {
+            const topPos = servicesElement.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: topPos - 150, behavior: "smooth" });
+          }
+          break;
+        default:
+          break;
+      }
+    }, 400); // O delay vai ajudar a processar o clique corretamente
+  }  
+  
   return (
     <Styled.Header id="header">
       <Styled.HeaderNav isOpenMenu={isOpenMenu}>
         <Styled.Flex>
           <Align flex alignCenter>
-            <Styled.NavLinkItem to="/">
+            <Styled.NavLinkItem to="/" onClick={() => { handleScroll("/about-us"); }}>
               <Styled.ImgLogoInline src={InlineLogo} />
             </Styled.NavLinkItem>
             {userType === "admin" && (
@@ -121,13 +154,18 @@ export function Header({ selectedItem }) {
         </Styled.Flex>
         <Styled.ContentMenu>
           <Styled.Ul isOpenMenu={isOpenMenu}>
-            <Styled.NavLinkItem to="/" selected={selectedItem === "/about-us"}>
+            <Styled.NavLinkItem
+              to="/"
+              selected={selectedItem === "/about-us"}
+              onClick={() => { handleScroll("/about-us"); }}
+            >
               Sobre nós
             </Styled.NavLinkItem>
             {isOpenMenu && <Hr />}
             <Styled.NavLinkItem
               to="/products"
               selected={selectedItem === "/products"}
+              onClick={() => { handleScroll("/products"); }}
             >
               Produtos
             </Styled.NavLinkItem>
@@ -135,6 +173,7 @@ export function Header({ selectedItem }) {
             <Styled.NavLinkItem
               to="/services"
               selected={selectedItem === "/services"}
+              onClick={() => { handleScroll("/services"); }}
             >
               Serviços
             </Styled.NavLinkItem>
@@ -143,11 +182,12 @@ export function Header({ selectedItem }) {
               href="#footer"
               onClick={() => {
                 handleOnclickIsOpenMenuSamePage();
+                handleScroll(); // Adiciona o scroll ao clicar
               }}
             >
               Contato
             </Styled.A>
-          <SelectLanguage />
+            <SelectLanguage />
           </Styled.Ul>
 
         </Styled.ContentMenu>
@@ -157,7 +197,7 @@ export function Header({ selectedItem }) {
           if (item[selectedItem]) {
             return (
               <React.Fragment key={index}>
-                <Img src={item[selectedItem][selectedPointIndex]} />
+                <Styled.ImgHeader src={item[selectedItem][selectedPointIndex]} />
                 <Styled.Points>
                   {item[selectedItem].map((img, imgIndex) => (
                     <Styled.Point

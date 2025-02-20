@@ -16,7 +16,7 @@ export function Product() {
     <div>
       <Header selectedItem={selectedItem} />
       <PageContent>
-        <Text text="Lista de Produtos" title />
+        <Text id="products-list" text="Lista de Produtos" title />
         <ProductList/>
       </PageContent>
       <Footer />

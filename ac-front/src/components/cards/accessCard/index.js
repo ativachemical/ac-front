@@ -5,7 +5,6 @@ import { api } from "../../../services/ac-api"
 import * as Styles from "./style"
 import { useDispatch } from "react-redux"
 import { saveUserToken, setUserType } from "../../../redux/user/slice"
-import { verifyRecaptcha } from "../../recaptcha/recaptchaV2/service"
 
 function test() {
   return async () => {
@@ -119,7 +118,7 @@ export function AccessCard() {
               onChange={(e) => setPassword(e.target.value)}
             />
             {/* reCAPTCHA */}
-            <RecaptchaV2 onVerify={handleVerify} />
+            <RecaptchaV2 onVerifyF={handleVerify} />
             {/* Botão de login desativado até resolver o reCAPTCHA */}
             <Button
               text="Login"

@@ -9,7 +9,7 @@ export function Services() {
             <Header selectedItem={selectedItem} />
                 <PageContent>
 
-                    <Text text="Fornecendo soluções" title/>
+                    <Text id="providing-solutions" text="Fornecendo soluções" title/>
                     <Text space={10} text={["A Ativa Chemical é uma empresa marcada por uma trajetória de anos de experiência no mercado nacional e internacional. "
                     ,"Impulsionados por grandes desafios, simplificação de processos, gestão de riscos e entrega de resultados sólidos. Apresentamos uma solução completa e abrangente, moldada para atender às necessidades de pequenos, médios e grandes compradores brasileiros de produtos químicos."
                     ,"Especializada no desenvolvimento de novos fornecedores alinhados com as demandas mais exigentes desse setor, a Ativa Chemical garante a procedência e fornecimento de seus produtos químicos, proporcionando aos nossos clientes uma consistência na qualidade das matérias-primas. Isso resulta na eliminação de impactos nas correções de fórmulas, garantindo um abastecimento confiável para a industrialização ou revenda."

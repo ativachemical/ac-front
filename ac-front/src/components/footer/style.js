@@ -1,5 +1,6 @@
 import styled from "styled-components"
-import { Linkedin, Whatsapp, ArrowUp, Link as LinkSvg } from "../../assets/icons/index.js"
+import { NavLink } from "react-router-dom"
+import { Linkedin, Whatsapp, ArrowUp, Link as LinkSvg, Location } from "../../assets/icons/index.js"
 
 export const Footer = styled.footer`
   background: var(--bg-theme-color);
@@ -16,7 +17,7 @@ export const Footer = styled.footer`
 export const ContentFooter = styled.footer`
   display: flex;
   max-width: 900px;
-  gap: 100px;
+  gap: 50px;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 20px;
@@ -59,12 +60,21 @@ export const Flex = styled.div`
   align-items: baseline;
 `
 
+export const AlignLinksCenter = styled.div`
+  display: flex;
+  margin-top:10px;
+flex-direction:column;
+align-items:center;
+gap:5px;
+`
+
 export const Left = styled.div`
   display: flex;
   gap: 5px;
   flex-direction: column;
   text-align: center;
   align-items: center;
+  justify-content:center;
 `
 
 export const FooterTitle = styled.div`
@@ -93,11 +103,40 @@ export const Text = styled.p`
 export const Link = styled.p`
   font-size: 17px;
   color: var(--solid-color);
-  max-width: 200px;
+  max-width: ${(props) => (props.noWrap ? "none" : "200px")};
+  width: 100%;
   opacity: 0.9;
-  gap: 20px;
+  gap: 5px;
   word-break: break-word;
   cursor: pointer;
+  display: flex;
+  align-items:center;
+
+  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
+
+  @media( width < 768px){
+    max-width: none;
+    text-align: center;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+export const NavLinkItem = styled(NavLink)`
+  font-size: 17px;
+  color: var(--solid-color);
+  max-width: ${(props) => (props.noWrap ? "none" : "200px")};
+  width: 100%;
+  opacity: 0.9;
+  gap: 10px;
+  word-break: break-word;
+  cursor: pointer;
+  display: flex;
+  align-items:center;
+
+  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
+
   @media( width < 768px){
     max-width: none;
     text-align: center;
@@ -115,11 +154,11 @@ export const RightContent = styled.div`
   gap: 20px;
   align-items: flex-end;
 
-  svg {
+  /* svg {
     width: 30px;
     height: auto;
     cursor: pointer;
-  }
+  } */
 
   @media (width < 769px) {
     display: flex;
@@ -129,16 +168,29 @@ export const RightContent = styled.div`
 `
 
 export const WhatsappNumberIcon = styled(Whatsapp)`
-  width: 18px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  fill: var(--solid-color);
+`
+
+export const LocationIcon = styled(Location)`
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   fill: var(--solid-color);
 `
 
 export const WhatsappIcon = styled(Whatsapp)`
+  width: 15px;
+  height: 15px;
   fill: var(--solid-color);
 `
 
 export const LinkedinIcon = styled(Linkedin)`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
   fill: var(--solid-color);
 `
 
@@ -149,6 +201,18 @@ export const ArrowUpIcon = styled(ArrowUp)`
 `
 export const LinkIcon = styled(LinkSvg)`
   fill: var(--solid-color);
+`
+
+export const LinkVoltarAoTopo = styled.a`
+  background: var(--solid-color);
+  fill: var(--text-color);
+  border-radius: 10px;
+  justify-content:center;
+  align-items:center;
+  padding:5px;
+  display:flex;
+  color: var(--text-color);
+  font-size:14px;
 `
 
 export const GapIcons = styled.div`

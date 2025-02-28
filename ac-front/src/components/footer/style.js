@@ -16,11 +16,12 @@ export const Footer = styled.footer`
 
 export const ContentFooter = styled.footer`
   display: flex;
-  max-width: 900px;
+  max-width: 2000px;
+  width: 100%;
   gap: 50px;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 30px;
 
   @media(width < 768px){
     justify-content: center;
@@ -70,7 +71,6 @@ gap:5px;
 
 export const Left = styled.div`
   display: flex;
-  gap: 5px;
   flex-direction: column;
   text-align: center;
   align-items: center;

@@ -90,7 +90,6 @@ export function Footer() {
           <Styled.Gap>
             <Styled.FooterTitle>Entre em</Styled.FooterTitle>
             <Styled.FooterTitle>Contato conosco</Styled.FooterTitle>
-            <Styled.Text>Siga-nos nas redes sociais</Styled.Text>
 
             {/* <Align column alignCenter> */}
             <Styled.AlignLinksCenter>

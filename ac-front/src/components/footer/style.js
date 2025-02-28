@@ -21,7 +21,7 @@ export const ContentFooter = styled.footer`
   gap: 50px;
   justify-content: space-around;
   flex-wrap: wrap;
-  padding: 30px;
+  padding: 10px 10px 0 10px;
 
   @media(width < 768px){
     justify-content: center;
@@ -74,7 +74,6 @@ export const Left = styled.div`
   flex-direction: column;
   text-align: center;
   align-items: center;
-  justify-content:center;
 `
 
 export const FooterTitle = styled.div`

@@ -29,8 +29,9 @@ export function AccessCard() {
   const navigate = useNavigate()
 
   const handleVerify = (token) => {
-    console.log("Token do reCAPTCHA recebido:", token); // Verifique se o token está correto
-    setRecaptchaToken(token); // Atualiza o estado com o token
+    console.log("Token do reCAPTCHA recebido:", token); 
+    setRecaptchaToken(token);
+ // Garante que o estado é atualizado com um novo valor
   };
 
   const loginOn = () => setIsRegister(false);
@@ -118,13 +119,13 @@ export function AccessCard() {
               onChange={(e) => setPassword(e.target.value)}
             />
             {/* reCAPTCHA */}
-            <RecaptchaV2 onVerifyF={handleVerify} />
+            <RecaptchaV2 onVerify={handleVerify}/>
             {/* Botão de login desativado até resolver o reCAPTCHA */}
             <Button
               text="Login"
               onClick={actionLogin}
               type="primary"
-              disabled={!recaptchaToken} // Só habilita se tiver um token válido
+              disabled={!email || !password || !recaptchaToken} // Só habilita se tiver um token válido
             />
           </>
         )}

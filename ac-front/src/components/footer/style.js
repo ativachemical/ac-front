@@ -34,10 +34,10 @@ export const FooterText = styled.p`
   opacity: 0.3;
   font-weight: 400;
   font-size: 20px;
-  padding: 5px;
 `
 export const ImgLogo = styled.img`
   width: 80px;
+  margin-bottom:10px;
   height: auto;
   opacity: 0.6;
 `
@@ -72,14 +72,29 @@ gap:5px;
 export const Left = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
+`
+
+export const LeftFirstBlock = styled.div`
+  display: flex;
+  gap:50px;
+  width:100%;
+  @media(width<768px){
+    flex-direction:column;
+  }
+`
+
+export const LeftFistItem = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap:5px;
 `
 
 export const FooterTitle = styled.div`
   font-weight: 600;
   color: var(--solid-color);
   font-size: 22px;
+  margin-bottom:7px;
 `
 
 export const Bold = styled.p`
@@ -127,6 +142,7 @@ export const NavLinkItem = styled(NavLink)`
   color: var(--solid-color);
   max-width: ${(props) => (props.noWrap ? "none" : "200px")};
   width: 100%;
+  height:24.4px;
   opacity: 0.9;
   gap: 10px;
   word-break: break-word;
@@ -197,6 +213,7 @@ export const ArrowUpIcon = styled(ArrowUp)`
   background: var(--solid-color);
   fill: var(--text-color);
   border-radius: 10px;
+  width:25px;
 `
 export const LinkIcon = styled(LinkSvg)`
   fill: var(--solid-color);
@@ -208,10 +225,10 @@ export const LinkVoltarAoTopo = styled.a`
   border-radius: 10px;
   justify-content:center;
   align-items:center;
-  padding:5px;
   display:flex;
   color: var(--text-color);
   font-size:14px;
+  margin-left:20px;
 `
 
 export const GapIcons = styled.div`

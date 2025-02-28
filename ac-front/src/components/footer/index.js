@@ -59,59 +59,67 @@ export function Footer() {
 
         <Styled.Left>
           <Styled.ImgLogo src={WhiteLogo} />
-          <Styled.FooterTitle translate="no">Ativa Chemical</Styled.FooterTitle>
-          <br />
-          <Styled.Link onClick={openMapsSaoPaulo} translate="no" >
-            <Styled.LocationIcon onClick={openMapsSaoPaulo} />
-            São Paulo, SP
-          </Styled.Link>
+          <Styled.LeftFirstBlock>
+            <Styled.LeftFistItem>
+              <Styled.FooterTitle translate="no">Ativa Chemical</Styled.FooterTitle>
 
-          <Styled.Link onClick={openMapsUruguay} translate="no" >
-            <Styled.LocationIcon onClick={openMapsUruguay} />
-            Montevideo, Uruguay
-          </Styled.Link>
+              <Styled.Link onClick={openMapsSaoPaulo} translate="no" >
+                <Styled.LocationIcon onClick={openMapsSaoPaulo} />
+                São Paulo, SP
+              </Styled.Link>
 
-          <Styled.Link onClick={openMapsChina} translate="no" >
-            <Styled.LocationIcon onClick={openMapsChina} />
-            Shenzhen, China
-          </Styled.Link>
+              <Styled.Link onClick={openMapsUruguay} translate="no" >
+                <Styled.LocationIcon onClick={openMapsUruguay} />
+                Montevideo, Uruguay
+              </Styled.Link>
+
+              <Styled.Link onClick={openMapsChina} translate="no" >
+                <Styled.LocationIcon onClick={openMapsChina} />
+                Shenzhen, China
+              </Styled.Link>
+            </Styled.LeftFistItem>
+
+            <Styled.MiddleContent>
+              <Styled.MiddleRight>
+                <Styled.FooterTitle>Fornecendo Soluções</Styled.FooterTitle>
+                <Styled.NavLinkItem to="/">Sobre nós</Styled.NavLinkItem>
+                <Styled.NavLinkItem to="/products">Produtos</Styled.NavLinkItem>
+                <Styled.NavLinkItem to="/services">Serviços</Styled.NavLinkItem>
+              </Styled.MiddleRight>
+            </Styled.MiddleContent>
+          </Styled.LeftFirstBlock>
         </Styled.Left>
-
-        <Styled.MiddleContent>
-          <Styled.MiddleRight>
-            <Styled.FooterTitle>Fornecendo Soluções</Styled.FooterTitle>
-            <Styled.NavLinkItem to="/">Sobre nós</Styled.NavLinkItem>
-            <Styled.NavLinkItem to="/products">Produtos</Styled.NavLinkItem>
-            <Styled.NavLinkItem to="/services">Serviços</Styled.NavLinkItem>
-          </Styled.MiddleRight>
-        </Styled.MiddleContent>
 
         <Styled.RightContent>
           <Styled.Gap>
-            <Styled.FooterTitle>Entre em</Styled.FooterTitle>
-            <Styled.FooterTitle>Contato conosco</Styled.FooterTitle>
+            <Styled.FooterTitle>Entre em Contato conosco</Styled.FooterTitle>
 
             {/* <Align column alignCenter> */}
             <Styled.AlignLinksCenter>
               <Styled.Flex>
                 <Styled.Link onClick={() => openWhatsapp(1)}>
-                  (11) 9 1399-1412
                   <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(1)} />
+                  (11) 9 1399-1412
                 </Styled.Link>
               </Styled.Flex>
               <Styled.Flex>
                 <Styled.Link onClick={() => openWhatsapp(2)}>
-                  (11) 9 1272-1893
                   <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(2)} />
+                  (11) 9 1272-1893
                 </Styled.Link>
               </Styled.Flex>
               <Styled.Flex>
                 <Styled.Link translate="no" onClick={() => openLinkedin()}>
-                  ativa-chemical
                   <Styled.LinkedinIcon onClick={() => openLinkedin()} />
+                  ativa-chemical
                 </Styled.Link>
               </Styled.Flex>
-              <Styled.Link noWrap translate="no" onClick={() => openEmail()}>ativachemical@ativachemical.com</Styled.Link>
+              <Styled.Flex>
+                <Styled.Link noWrap translate="no" onClick={() => openEmail()}>ativachemical@ativachemical.com</Styled.Link>
+                <Styled.LinkVoltarAoTopo href="#header">
+                  <Styled.ArrowUpIcon href="#header" />
+                </Styled.LinkVoltarAoTopo>
+              </Styled.Flex>
             </Styled.AlignLinksCenter>
 
             {/* <Styled.GapIcons>
@@ -119,14 +127,10 @@ export function Footer() {
             </Styled.GapIcons> */}
           </Styled.Gap>
 
-          <Styled.LinkVoltarAoTopo href="#header">
-            <Styled.ArrowUpIcon href="#header" />
-            Voltar ao Topo
-          </Styled.LinkVoltarAoTopo>
         </Styled.RightContent>
       </Styled.ContentFooter>
 
-      <Align width gap="5px">
+      <Align width gap="5px" margin="20px">
         <Styled.LinkIcon onClick={openLinkedinFelipe} />
         <Styled.LastLine href="https://www.linkedin.com/in/felipe-sugisawa/" target="_blank">
           created by Felipe S.

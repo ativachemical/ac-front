@@ -1,7 +1,6 @@
 import React from "react"
 import { WhiteLogo } from "../../assets/imgs"
 import * as Styled from "./style.js"
-import { Align } from "../../style.js"
 
 export function Footer() {
   function openMapsSaoPaulo() {
@@ -56,87 +55,87 @@ export function Footer() {
   return (
     <Styled.Footer id="footer">
       <Styled.ContentFooter>
+        <Styled.ImageContent>
 
-        <Styled.Left>
-          <Styled.ImgLogo src={WhiteLogo} />
-          <Styled.LeftFirstBlock>
-            <Styled.LeftFistItem>
-              <Styled.FooterTitle translate="no">Ativa Chemical</Styled.FooterTitle>
+        <Styled.ImgLogo src={WhiteLogo} />
+        </Styled.ImageContent>
+        <Styled.LeftFirstBlock>
+          <Styled.LeftFistItem>
+            <Styled.FooterTitle translate="no">Ativa Chemical</Styled.FooterTitle>
 
-              <Styled.Link onClick={openMapsSaoPaulo} translate="no" >
-                <Styled.LocationIcon onClick={openMapsSaoPaulo} />
-                São Paulo, SP
-              </Styled.Link>
+            <Styled.Link onClick={openMapsSaoPaulo} translate="no" >
+              <Styled.LocationIcon onClick={openMapsSaoPaulo} />
+              São Paulo, SP
+            </Styled.Link>
 
-              <Styled.Link onClick={openMapsUruguay} translate="no" >
-                <Styled.LocationIcon onClick={openMapsUruguay} />
-                Montevideo, Uruguay
-              </Styled.Link>
+            <Styled.Link onClick={openMapsUruguay} translate="no" >
+              <Styled.LocationIcon onClick={openMapsUruguay} />
+              Montevideo, Uruguay
+            </Styled.Link>
 
-              <Styled.Link onClick={openMapsChina} translate="no" >
-                <Styled.LocationIcon onClick={openMapsChina} />
-                Shenzhen, China
-              </Styled.Link>
-            </Styled.LeftFistItem>
+            <Styled.Link onClick={openMapsChina} translate="no" >
+              <Styled.LocationIcon onClick={openMapsChina} />
+              Shenzhen, China
+            </Styled.Link>
+          </Styled.LeftFistItem>
 
-            <Styled.MiddleContent>
-              <Styled.MiddleRight>
-                <Styled.FooterTitle>Fornecendo Soluções</Styled.FooterTitle>
-                <Styled.NavLinkItem to="/">Sobre nós</Styled.NavLinkItem>
-                <Styled.NavLinkItem to="/products">Produtos</Styled.NavLinkItem>
-                <Styled.NavLinkItem to="/services">Serviços</Styled.NavLinkItem>
-              </Styled.MiddleRight>
-            </Styled.MiddleContent>
-          </Styled.LeftFirstBlock>
-        </Styled.Left>
+          <Styled.MiddleContent>
+            <Styled.MiddleRight>
+              <Styled.FooterTitle>Fornecendo Soluções</Styled.FooterTitle>
+              <Styled.NavLinkItem to="/">Sobre nós</Styled.NavLinkItem>
+              <Styled.NavLinkItem to="/products">Produtos</Styled.NavLinkItem>
+              <Styled.NavLinkItem to="/services">Serviços</Styled.NavLinkItem>
+            </Styled.MiddleRight>
+          </Styled.MiddleContent>
 
-        <Styled.RightContent>
-          <Styled.Gap>
-            <Styled.FooterTitle>Entre em Contato conosco</Styled.FooterTitle>
+          <Styled.RightContent>
+            <Styled.Gap>
+              <Styled.FooterTitle>Entre em Contato conosco</Styled.FooterTitle>
 
-            {/* <Align column alignCenter> */}
-            <Styled.AlignLinksCenter>
-              <Styled.Flex>
-                <Styled.Link onClick={() => openWhatsapp(1)}>
-                  <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(1)} />
-                  (11) 9 1399-1412
-                </Styled.Link>
-              </Styled.Flex>
-              <Styled.Flex>
-                <Styled.Link onClick={() => openWhatsapp(2)}>
-                  <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(2)} />
-                  (11) 9 1272-1893
-                </Styled.Link>
-              </Styled.Flex>
-              <Styled.Flex>
-                <Styled.Link translate="no" onClick={() => openLinkedin()}>
-                  <Styled.LinkedinIcon onClick={() => openLinkedin()} />
-                  ativa-chemical
-                </Styled.Link>
-              </Styled.Flex>
-              <Styled.Flex>
-                <Styled.Link noWrap translate="no" onClick={() => openEmail()}>ativachemical@ativachemical.com</Styled.Link>
-                <Styled.LinkVoltarAoTopo href="#header">
-                  <Styled.ArrowUpIcon href="#header" />
-                </Styled.LinkVoltarAoTopo>
-              </Styled.Flex>
-            </Styled.AlignLinksCenter>
+              {/* <Align column alignCenter> */}
+              <Styled.AlignLinksCenter>
+                <Styled.Flex>
+                  <Styled.Link onClick={() => openWhatsapp(1)}>
+                    <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(1)} />
+                    (11) 9 1399-1412
+                  </Styled.Link>
+                </Styled.Flex>
+                <Styled.Flex>
+                  <Styled.Link onClick={() => openWhatsapp(2)}>
+                    <Styled.WhatsappNumberIcon onClick={() => openWhatsapp(2)} />
+                    (11) 9 1272-1893
+                  </Styled.Link>
+                </Styled.Flex>
+                <Styled.Flex>
+                  <Styled.Link translate="no" onClick={() => openLinkedin()}>
+                    <Styled.LinkedinIcon onClick={() => openLinkedin()} />
+                    ativa-chemical
+                  </Styled.Link>
+                </Styled.Flex>
+                <Styled.Flex>
+                  <Styled.Link noWrap translate="no" onClick={() => openEmail()}>ativachemical@ativachemical.com</Styled.Link>
+                  <Styled.LinkVoltarAoTopo href="#header">
+                    <Styled.ArrowUpIcon href="#header" />
+                  </Styled.LinkVoltarAoTopo>
+                </Styled.Flex>
+              </Styled.AlignLinksCenter>
 
-            {/* <Styled.GapIcons>
+              {/* <Styled.GapIcons>
               <Styled.LinkedinIcon onClick={openLinkedin} />
             </Styled.GapIcons> */}
-          </Styled.Gap>
+            </Styled.Gap>
 
-        </Styled.RightContent>
+          </Styled.RightContent>
+        </Styled.LeftFirstBlock>
       </Styled.ContentFooter>
 
-      <Align width gap="5px" margin="20px">
+      <Styled.LinkFelipe>
         <Styled.LinkIcon onClick={openLinkedinFelipe} />
         <Styled.LastLine href="https://www.linkedin.com/in/felipe-sugisawa/" target="_blank">
           created by Felipe S.
         </Styled.LastLine>
 
-      </Align>
+      </Styled.LinkFelipe>
     </Styled.Footer>
   )
 }

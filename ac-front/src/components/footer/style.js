@@ -15,18 +15,22 @@ export const Footer = styled.footer`
 `
 
 export const ContentFooter = styled.footer`
-  display: flex;
   max-width: 2000px;
   width: 100%;
   gap: 50px;
   justify-content: space-around;
   flex-wrap: wrap;
-  padding: 10px 10px 0 10px;
+  padding: 10px 10vw 0 10vw;
+  text-align: center;
 
-  @media(width < 768px){
+  @media(width<768px){
     justify-content: center;
     text-align: center;
     gap: 50px;
+  }
+
+  @media(width>1280px){
+    padding: 10px 20% 0 20%;
   }
 `
 
@@ -38,8 +42,22 @@ export const FooterText = styled.p`
 export const ImgLogo = styled.img`
   width: 80px;
   margin-bottom:10px;
+  margin-left:10px;
   height: auto;
   opacity: 0.6;
+  @media(width<768px){
+    margin-bottom:20px;
+    margin-left:0;
+  }
+`
+export const ImageContent = styled.div`
+  width: 100%;
+  display: flex;
+  align-items:flex-start;
+
+  @media(width<768px){
+    justify-content:center;
+  }
 `
 
 export const MiddleContent = styled.div`
@@ -76,10 +94,13 @@ export const Left = styled.div`
 
 export const LeftFirstBlock = styled.div`
   display: flex;
-  gap:50px;
+  justify-content: space-between;
   width:100%;
+
   @media(width<768px){
     flex-direction:column;
+    align-items:center;
+    gap:20px;
   }
 `
 
@@ -94,7 +115,6 @@ export const FooterTitle = styled.div`
   font-weight: 600;
   color: var(--solid-color);
   font-size: 22px;
-  margin-bottom:7px;
 `
 
 export const Bold = styled.p`
@@ -217,6 +237,7 @@ export const ArrowUpIcon = styled(ArrowUp)`
 `
 export const LinkIcon = styled(LinkSvg)`
   fill: var(--solid-color);
+  width:14px;
 `
 
 export const LinkVoltarAoTopo = styled.a`
@@ -246,7 +267,7 @@ export const Gap = styled.div`
 `
 
 export const LastLine = styled.a`
-  font-size: 17px;
+  font-size: 14px;
   color: var(--solid-color);
   opacity: 0.6;
   gap: 20px;
@@ -255,5 +276,15 @@ export const LastLine = styled.a`
   text-decoration: underline;
   &:hover {
     color: var(--text-solid);
+  }
+`
+export const LinkFelipe = styled.div`
+  display: flex;
+  gap:5px;
+  width:100%;
+  padding:5px;
+  justify-content:center;
+  @media(width<768px){
+    margin-top:20px;
   }
 `

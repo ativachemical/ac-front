@@ -28,10 +28,6 @@ export const ContentFooter = styled.footer`
     text-align: center;
     gap: 50px;
   }
-
-  @media(width>1280px){
-    padding: 10px 20% 0 20%;
-  }
 `
 
 export const FooterText = styled.p`

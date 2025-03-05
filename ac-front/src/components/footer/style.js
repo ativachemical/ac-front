@@ -165,6 +165,7 @@ export const NavLinkItem = styled(NavLink)`
   cursor: pointer;
   display: flex;
   align-items:center;
+  justify-content:center;
 
   white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
 

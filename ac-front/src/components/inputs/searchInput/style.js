@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Search, Filter, List, Table, Close, Refresh, Settings, Plus } from '../../../assets/icons/index'
+import { Search, SearchQuery, Filter, List, Table, Close, Refresh, Settings, Plus, Download } from '../../../assets/icons/index'
 import { BaseIcon } from '../../../style';
 
 
@@ -33,6 +33,12 @@ export const Input = styled.input`
   &:valid {
     outline: none;
   }
+`;
+
+export const SearchQueryIcon = styled(BaseIcon).attrs({
+  as: SearchQuery,
+})`
+  fill: var(--text-solid);
 `;
 
 export const SearchIcon = styled(BaseIcon).attrs({

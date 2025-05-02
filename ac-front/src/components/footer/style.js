@@ -1,5 +1,6 @@
 import styled from "styled-components"
-import { Linkedin, Whatsapp, ArrowUp, Link as LinkSvg } from "../../assets/icons/index.js"
+import { NavLink } from "react-router-dom"
+import { Linkedin, Whatsapp, ArrowUp, Link as LinkSvg, Location } from "../../assets/icons/index.js"
 
 export const Footer = styled.footer`
   background: var(--bg-theme-color);
@@ -14,14 +15,15 @@ export const Footer = styled.footer`
 `
 
 export const ContentFooter = styled.footer`
-  display: flex;
-  max-width: 900px;
-  gap: 100px;
-  justify-content: space-between;
+  max-width: 2000px;
+  width: 100%;
+  gap: 50px;
+  justify-content: space-around;
   flex-wrap: wrap;
-  padding: 20px;
+  padding: 10px 10vw 0 10vw;
+  text-align: center;
 
-  @media(width < 768px){
+  @media(width<768px){
     justify-content: center;
     text-align: center;
     gap: 50px;
@@ -32,12 +34,26 @@ export const FooterText = styled.p`
   opacity: 0.3;
   font-weight: 400;
   font-size: 20px;
-  padding: 5px;
 `
 export const ImgLogo = styled.img`
   width: 80px;
+  margin-bottom:10px;
+  margin-left:10px;
   height: auto;
   opacity: 0.6;
+  @media(width<768px){
+    margin-bottom:20px;
+    margin-left:0;
+  }
+`
+export const ImageContent = styled.div`
+  width: 100%;
+  display: flex;
+  align-items:flex-start;
+
+  @media(width<768px){
+    justify-content:center;
+  }
 `
 
 export const MiddleContent = styled.div`
@@ -59,12 +75,36 @@ export const Flex = styled.div`
   align-items: baseline;
 `
 
+export const AlignLinksCenter = styled.div`
+  display: flex;
+  margin-top:10px;
+flex-direction:column;
+align-items:center;
+gap:5px;
+`
+
 export const Left = styled.div`
   display: flex;
-  gap: 5px;
   flex-direction: column;
-  text-align: center;
+`
+
+export const LeftFirstBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width:100%;
+
+  @media(width<768px){
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
+`
+
+export const LeftFistItem = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap:5px;
 `
 
 export const FooterTitle = styled.div`
@@ -93,11 +133,42 @@ export const Text = styled.p`
 export const Link = styled.p`
   font-size: 17px;
   color: var(--solid-color);
-  max-width: 200px;
+  max-width: ${(props) => (props.noWrap ? "none" : "200px")};
+  width: 100%;
   opacity: 0.9;
-  gap: 20px;
-  word-break: break-all;
+  gap: 5px;
+  word-break: break-word;
   cursor: pointer;
+  display: flex;
+  align-items:center;
+
+  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
+
+  @media( width < 768px){
+    max-width: none;
+    text-align: center;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+export const NavLinkItem = styled(NavLink)`
+  font-size: 17px;
+  color: var(--solid-color);
+  max-width: ${(props) => (props.noWrap ? "none" : "200px")};
+  width: 100%;
+  height:24.4px;
+  opacity: 0.9;
+  gap: 10px;
+  word-break: break-word;
+  cursor: pointer;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+
+  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
+
   @media( width < 768px){
     max-width: none;
     text-align: center;
@@ -115,11 +186,11 @@ export const RightContent = styled.div`
   gap: 20px;
   align-items: flex-end;
 
-  svg {
+  /* svg {
     width: 30px;
     height: auto;
     cursor: pointer;
-  }
+  } */
 
   @media (width < 769px) {
     display: flex;
@@ -129,16 +200,29 @@ export const RightContent = styled.div`
 `
 
 export const WhatsappNumberIcon = styled(Whatsapp)`
-  width: 18px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  fill: var(--solid-color);
+`
+
+export const LocationIcon = styled(Location)`
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   fill: var(--solid-color);
 `
 
 export const WhatsappIcon = styled(Whatsapp)`
+  width: 15px;
+  height: 15px;
   fill: var(--solid-color);
 `
 
 export const LinkedinIcon = styled(Linkedin)`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
   fill: var(--solid-color);
 `
 
@@ -146,9 +230,23 @@ export const ArrowUpIcon = styled(ArrowUp)`
   background: var(--solid-color);
   fill: var(--text-color);
   border-radius: 10px;
+  width:25px;
 `
 export const LinkIcon = styled(LinkSvg)`
   fill: var(--solid-color);
+  width:14px;
+`
+
+export const LinkVoltarAoTopo = styled.a`
+  background: var(--solid-color);
+  fill: var(--text-color);
+  border-radius: 10px;
+  justify-content:center;
+  align-items:center;
+  display:flex;
+  color: var(--text-color);
+  font-size:14px;
+  margin-left:20px;
 `
 
 export const GapIcons = styled.div`
@@ -166,7 +264,7 @@ export const Gap = styled.div`
 `
 
 export const LastLine = styled.a`
-  font-size: 17px;
+  font-size: 14px;
   color: var(--solid-color);
   opacity: 0.6;
   gap: 20px;
@@ -175,5 +273,15 @@ export const LastLine = styled.a`
   text-decoration: underline;
   &:hover {
     color: var(--text-solid);
+  }
+`
+export const LinkFelipe = styled.div`
+  display: flex;
+  gap:5px;
+  width:100%;
+  padding:5px;
+  justify-content:center;
+  @media(width<768px){
+    margin-top:20px;
   }
 `

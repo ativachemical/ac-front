@@ -1,83 +1,86 @@
-import React, { useState } from 'react';
-import { DefaultImg, Agro, WaterTreatment, PaintsAndResins, HomeAndIndustrialCleaning, AgroPage, PaintPage, CleanPage, WaterTreatmentPage } from '../../../assets/imgs';
-import * as Styles from './style';
-import { Text } from '../../text';
+import React from "react"
+import {
+  DefaultImg,
+  Agro,
+  WaterTreatment,
+  PaintsAndResins,
+  HomeAndIndustrialCleaning,
+} from "../../../assets/imgs"
+import * as Styles from "./style"
+import { Text } from "../../text"
+import { useDispatch } from "react-redux"
+import { justOneInSegmentList } from "../../../redux/product/slice"
 
 const values = [
-    {
-        img: Agro,
-        imgPage: AgroPage,
-        title: "Agro",
-        icon: <Styles.PlantIcon />,
-    },
-    {
-        img: PaintsAndResins,
-        imgPage: PaintPage,
-        title: "Tintas & Resinas",
-        icon: <Styles.ColorIcon />,
-    },
-    {
-        img: HomeAndIndustrialCleaning,
-        imgPage: CleanPage,
-        title: "Home & Industrial Cleaning",
-        icon: <Styles.CleanHandsIcon />,
-    },
-    {
-        img: WaterTreatment,
-        imgPage: WaterTreatmentPage,
-        title: "Tratamento de Água",
-        icon: <Styles.DropPlusLessIcon />,
-    },
-];
+  {
+    img: Agro,
+    title: "Agro",
+    filterRedirectProducts: "agricultura",
+    icon: <Styles.PlantIcon />,
+  },
+  {
+    img: PaintsAndResins,
+    title: "Tintas & Resinas",
+    filterRedirectProducts: "tintas_e_resinas",
+    icon: <Styles.ColorIcon />,
+  },
+  {
+    img: HomeAndIndustrialCleaning,
+    title: "Home & Industrial Cleaning",
+    filterRedirectProducts: "cuidados_em_casa",
+    icon: <Styles.CleanHandsIcon />,
+  },
+  {
+    img: WaterTreatment,
+    title: "Tratamento de Água",
+    filterRedirectProducts: "tratamento_de_agua",
+    icon: <Styles.DropPlusLessIcon />,
+  },
+]
 
-export function ProductCardItem({ img = DefaultImg, imgPage, title = 'Product name', icon = <Styles.PlantIcon/>, linkName = 'Saiba mais' }) {
-    const [fullScreen, setFullScreen] = useState(false);
+export function ProductCardItem({
+  img = DefaultImg,
+  title = "Product name",
+  icon = <Styles.PlantIcon />,
+  linkName = "Saiba mais",
+  filterRedirectProducts = "",
+}) {
+  const dispatch = useDispatch()
 
-    const handleFullScreen = () => {
-        setFullScreen(true);
-    };
+  const handleRedirectToProductWidthFilter = (value) => {
+    dispatch(justOneInSegmentList(value))
+    window.location.href = `/products`
+  }
 
-    const handleCloseFullScreen = () => {
-        setFullScreen(false);
-    };
-
-    return (
-        <>
-            {!fullScreen ? (
-                <Styles.ContentCard onClick={handleFullScreen}>
-                    <div style={{ position: 'relative' }}>
-                        <Styles.Img src={img} alt="Product" width="100%" borderRadius="20px"/>
-                        {icon}
-                    </div>
-                    <Styles.TextCard>
-                        <Text bold center text={title}/>
-                        <Text link text={linkName}/>
-                    </Styles.TextCard>
-                </Styles.ContentCard>
-            ) : (
-                <Styles.FullScreenContainer onClick={handleCloseFullScreen}>
-                    <Styles.ImageContainer>
-                        <Styles.Img src={imgPage} alt="Product" width="100%" height="auto" borderRadius="20px"/>
-                    </Styles.ImageContainer>
-                    <Styles.CloseIcon/>
-                </Styles.FullScreenContainer>
-            )}
-        </>
-    );
-}
+  return (
+    <Styles.ContentCard
+      onClick={() => handleRedirectToProductWidthFilter(filterRedirectProducts)}
+    >
+      <div style={{ position: "relative" }}>
+        <Styles.Img src={img} alt="Product" width="100%" borderRadius="20px" />
+        {icon}
+      </div>
+      <Styles.TextCard>
+        <Text bold center text={title} />
+        <Text link text={linkName} />
+      </Styles.TextCard>
+    </Styles.ContentCard>
+  )
+} 
 
 export function ProductDescription() {
-    return (
-        <Styles.ContentCards>
-            {values.map((product, index) => (
-                <ProductCardItem
-                    key={index}
-                    img={product.img}
-                    title={product.title}
-                    icon={product.icon}
-                    imgPage={product.imgPage}
-                />
-            ))}
-        </Styles.ContentCards>
-    );
+  return (
+    <Styles.ContentCards>
+      {values.map((product, index) => (
+        <ProductCardItem
+          key={index}
+          img={product.img}
+          title={product.title}
+          icon={product.icon}
+          imgPage={product.imgPage}
+          filterRedirectProducts={product.filterRedirectProducts}
+        />
+      ))}
+    </Styles.ContentCards>
+  )
 }

@@ -13,7 +13,8 @@ export function Button({
   type,
   color,
   response,
-  htmlFor
+  htmlFor,
+  disabled = false
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [buttonType, setButtonType] = useState(type)
@@ -51,23 +52,36 @@ export function Button({
       borderColor={borderColor}
       size={size}
       onClick={isLoading ? null : handleClick}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       type={buttonType} // Use buttonType instead of type here
       color={color}
       htmlFor={htmlFor}
     >
       {isLoading ? (
-        <Styles.ContentIcon type={buttonType}>
-          <Styles.LoadingIcon type={buttonType} />
-        </Styles.ContentIcon>
+        <Styles.ButtonWithIcon>
+          {text &&
+            <>
+              <Styles.SpanText>{text}</Styles.SpanText>
+              <Styles.ContentIcon size='17px' type={buttonType}>
+                <Styles.LoadingIcon type={buttonType} />
+              </Styles.ContentIcon>
+            </>
+          }
+          {!text &&
+            <Styles.ContentIcon size='27px' type={buttonType}>
+              <Styles.LoadingIcon type={buttonType} />
+            </Styles.ContentIcon>
+          }
+        </Styles.ButtonWithIcon>
       ) : (
-        <Align gap={"4px"} alignCenter justify={"center"}>
+        <Styles.ButtonWithIcon>
           {icon && (
             <Styles.ContentIcon type={buttonType}>{icon}</Styles.ContentIcon>
           )}
           {text && <Styles.SpanText>{text}</Styles.SpanText>}
-        </Align>
-      )}
-    </Styles.Button>
+        </Styles.ButtonWithIcon>
+      )
+      }
+    </Styles.Button >
   )
 }

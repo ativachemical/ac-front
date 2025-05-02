@@ -15,8 +15,10 @@
   --solid-color: #f4f4f4;
   --text-logged-color: rgba(47, 51, 79, 0.55);
   --button-color: #759fe7;
-  --danger-color: #ff4a4a;
-  --success-color: #83eb80;
+  --danger-color: #e96363;
+  --danger-color-opacity: #ff4a4a45;
+  --success-color: #5ed25b;
+  --success-color-opacity: #84eb8060;
   --error-color: #ff7f7f;
   --admin-color: #fcb920;
   --admin-color-opacity: #f0bb3e2f;
@@ -27,6 +29,7 @@
   );
   --box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.25);
   --box-shadow-secondary: 0 0 10px rgba(0, 0, 0, 0.3);
+  --shadow-card: rgba(99, 99, 99, 0.4) 0px 3px 9px 0px;
 }
 
 * {

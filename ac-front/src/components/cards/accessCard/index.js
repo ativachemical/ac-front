@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Button, InputForm } from "../../index"
+import React, { useEffect, useState } from "react"
+import { Button, InputForm, RecaptchaV2 } from "../../index"
 import { useNavigate } from "react-router-dom"
 import { api } from "../../../services/ac-api"
 import * as Styles from "./style"
@@ -23,41 +23,71 @@ export function AccessCard() {
   const [password, setPassword] = useState("")
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginError, setLoginError] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  const [clientIp, setClientIp] = useState("");
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
-  const loginOn = () => {
-    setIsRegister(false)
-  }
+  const handleVerify = (token) => {
+    console.log("Token do reCAPTCHA recebido:", token); 
+    setRecaptchaToken(token);
+ // Garante que o estado é atualizado com um novo valor
+  };
 
-  const loginOff = () => {
-    setIsRegister(true)
-  }
+  const loginOn = () => setIsRegister(false);
+  const loginOff = () => setIsRegister(true);
+
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const response = await fetch("https://api64.ipify.org?format=json");
+        const data = await response.json();
+        setClientIp(data.ip);
+      } catch (error) {
+        console.error("Erro ao obter o IP:", error);
+      }
+    };
+
+    fetchIp();
+  }, []);
 
   const actionLogin = async () => {
+    console.log("Token antes da validação:", recaptchaToken);
+
+    if (!recaptchaToken) {
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 1000);
+      return;
+    }
+
     try {
       const requestData = {
         email: email,
         password: password,
-      }
-      const response = await api.post("/auth/login", requestData)
+        recaptchaToken: recaptchaToken,
+        recaptchaClientIp: clientIp, // Agora enviando o IP do usuário
+      };
+
+      const response = await api.post("/auth/login", requestData);
 
       if (response.data) {
-        setLoginSuccess(true)
-        dispatch(setUserType("admin"))
-        dispatch(saveUserToken(response.data.accessToken))
+        setLoginSuccess(true);
+        dispatch(setUserType("admin"));
+        dispatch(saveUserToken(response.data.accessToken));
+
         setTimeout(() => {
-          setLoginSuccess(false) //remove after 1s
-          navigate("/products")
-        }, 500)
+          setLoginSuccess(false);
+          navigate("/products");
+        }, 500);
       }
     } catch (error) {
-      setLoginError(true)
-      setTimeout(() => setLoginError(false), 1000) //remove after 1s
-      console.error("Error making the API request:", error)
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 1000);
+      console.error("Erro ao fazer login:", error);
     }
-  }
+  };
+
+
 
   return (
     <Styles.Card>
@@ -88,10 +118,14 @@ export function AccessCard() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {/* reCAPTCHA */}
+            <RecaptchaV2 onVerify={handleVerify}/>
+            {/* Botão de login desativado até resolver o reCAPTCHA */}
             <Button
               text="Login"
               onClick={actionLogin}
-              type={"primary"}
+              type="primary"
+              disabled={!email || !password || !recaptchaToken} // Só habilita se tiver um token válido
             />
           </>
         )}

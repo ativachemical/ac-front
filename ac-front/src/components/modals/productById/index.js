@@ -6,6 +6,9 @@ import {
   DynamicInputs,
   SegmentIconsInput,
   InputSimple,
+  ConfirmDeleteModal,
+  DownloadButton,
+  DownloadProductModal,
 } from "../../index"
 import { Align } from "../../../style"
 import { useSelector, useDispatch } from "react-redux"
@@ -55,6 +58,27 @@ export const changeDeleteStatusProductById = async (id, userToken) => {
   }
 }
 
+export const restoreProductById = async (id, userToken) => {
+  try {
+    const response = await api.put(
+      `/product/change-delete-status/${id}?is_deleted=false`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    )
+
+    return response?.data
+  } catch (error) {
+    console.error(
+      "Error making the API request:",
+      error.response?.data || error.message
+    )
+  }
+}
+
 export const createProduct = async (imageFile, product, userToken) => {
   const formData = new FormData()
   if (imageFile) {
@@ -85,6 +109,7 @@ export const createProduct = async (imageFile, product, userToken) => {
 
 export function ProductModalById({ productById, productImageById }) {
   const [product, setProduct] = useState(productById)
+  const [isDownloadProductModalOpen, setIsDownloadProductModalOpen] = useState(false)
   const [formData, setFormData] = useState({
     product: null,
     comercialName: "",
@@ -104,6 +129,7 @@ export function ProductModalById({ productById, productImageById }) {
   })
 
   const [isEdit, setIsEdit] = useState(false)
+  const [isModalConfirmDeletionProductOpen, setIsModalConfirmDeletionProductOpen] = useState(false);
   const dispatch = useDispatch()
   const userToken = useSelector((state) => state.userReducer.userToken)
   const isModalByIdOpen = useSelector(
@@ -114,6 +140,15 @@ export function ProductModalById({ productById, productImageById }) {
   )
   const productImage = useSelector((state) => state.productReducer.productImage)
   const userType = useSelector((state) => state.userReducer.userType)
+
+  const handleModalConfirmDeletion = () => {
+    console.log("Abrindo modal de confirmação");
+    setIsModalConfirmDeletionProductOpen((prev) => !prev);
+  };
+
+  const toggleModalDownloadProduct = () => {
+    setIsDownloadProductModalOpen(!isDownloadProductModalOpen);
+  }
 
   const resetForm = useCallback(() => {
     setFormData({
@@ -203,7 +238,7 @@ export function ProductModalById({ productById, productImageById }) {
       let response
       if (formData.product && !isModalCreateProductOpen) {
         response = await editProductById(
-          formData.product.id,
+          formData.product?.id,
           productEdited,
           userToken
         )
@@ -222,8 +257,14 @@ export function ProductModalById({ productById, productImageById }) {
     }
   }
 
-  const handleDeleteProduct = async () => {
-    await changeDeleteStatusProductById(formData.product.id, userToken)
+  const handleConfirmDeletion = async () => {
+    await changeDeleteStatusProductById(formData.product?.id, userToken)
+    setIsModalConfirmDeletionProductOpen(false)
+    toggleCloseModal()
+  }
+
+  const handleRestoreProduct = async () => {
+    await restoreProductById(formData.product?.id, userToken)
     toggleCloseModal()
   }
 
@@ -278,100 +319,112 @@ export function ProductModalById({ productById, productImageById }) {
   }
 
   return (
-    <BasicModal
-      key={formData.product?.id || "create"}
-      title={formData.comercialName}
-      isEdit={isEdit}
-      isOpen={isModalByIdOpen || isModalCreateProductOpen}
-      handleEdit={true}
-      fixed
-      handleModal={toggleCloseModal}
-      toggleEdit={toggleEdit}
-      maxWidth={"1000px"}
-      handleDelete={handleDeleteProduct}
-    >
-      <Align column gap={"50px"}>
-        <Align gap={"40px"} responsive margin="25px 0 0 0">
-          <Align column gap={"20px"} width="initial">
-            <InputFile
-              isEdit={isEdit}
-              productId={formData.product?.id}
-              onChange={handleFileChange}
-              userToken={userToken}
-              defaultImage={productImage?.data}
-            />
-            <SegmentIconsInput
-              segmentListActive={segmentListActive}
-              isEdit={isEdit}
-              toggleSegmentActive={toggleSegmentActive}
-            />
+    <>
+      <DownloadProductModal isOpen={isDownloadProductModalOpen} handleModal={toggleModalDownloadProduct} productId={formData.product?.id} />
+      <BasicModal
+        key={formData.product?.id || "create"}
+        title={formData.comercialName}
+        isEdit={isEdit}
+        isOpen={isModalByIdOpen || isModalCreateProductOpen}
+        handleEdit={true}
+        fixed
+        handleModal={toggleCloseModal}
+        toggleEdit={toggleEdit}
+        maxWidth={"1000px"}
+        handleDelete={handleModalConfirmDeletion}
+        handleRestore={handleRestoreProduct}
+        isDeleted={product?.is_deleted}
+        toggleModalButtonDownload={toggleModalDownloadProduct}
+      >
+        <ConfirmDeleteModal
+          isOpen={isModalConfirmDeletionProductOpen}
+          handleModal={handleModalConfirmDeletion}
+          confirmFunction={handleConfirmDeletion}
+        />
+
+        <Align column gap={"50px"}>
+          <Align gap={"40px"} responsive margin="25px 0 0 0">
+            <Align column gap={"20px"} width="initial">
+              <InputFile
+                isEdit={isEdit}
+                productId={formData.product?.id}
+                onChange={handleFileChange}
+                userToken={userToken}
+                defaultImage={productImage?.data}
+              />
+              <SegmentIconsInput
+                segmentListActive={segmentListActive}
+                isEdit={isEdit}
+                toggleSegmentActive={toggleSegmentActive}
+              />
+            </Align>
+
+            <Align gap={"20px"} column>
+              <InputSimple
+                type="textarea"
+                title="Nome Comercial"
+                value={formData.comercialName}
+                name="comercialName"
+                isEdit={isEdit}
+                maxW={"200px"}
+                onChange={handleInputChange}
+              />
+
+              <InputSimple
+                type="textarea"
+                title="Nome Químico"
+                value={formData.chemicalName}
+                name="chemicalName"
+                isEdit={isEdit}
+                maxW={"200px"}
+                onChange={handleInputChange}
+              />
+
+              <InputSimple
+                type="textarea"
+                title="Função"
+                value={formData.functionProduct}
+                name="functionProduct"
+                isEdit={isEdit}
+                maxW={"200px"}
+                onChange={handleInputChange}
+              />
+
+              <InputSimple
+                type="textarea"
+                title="Aplicação"
+                value={formData.application}
+                name="application"
+                isEdit={isEdit}
+                maxW={"200px"}
+                onChange={handleInputChange}
+              />
+            </Align>
           </Align>
 
           <Align gap={"20px"} column>
-            <InputSimple
-              type="textarea"
-              title="Nome Comercial"
-              value={formData.comercialName}
-              name="comercialName"
+            <DynamicInputs
+              inputValues={formData.inputTopics}
               isEdit={isEdit}
-              maxW={"200px"}
-              onChange={handleInputChange}
+              onChange={handleInputTopicsChange}
             />
 
-            <InputSimple
-              type="textarea"
-              title="Nome Químico"
-              value={formData.chemicalName}
-              name="chemicalName"
+            <InputTable
+              inputValue={formData.inputTable}
               isEdit={isEdit}
-              maxW={"200px"}
-              onChange={handleInputChange}
-            />
-
-            <InputSimple
-              type="textarea"
-              title="Função"
-              value={formData.functionProduct}
-              name="functionProduct"
-              isEdit={isEdit}
-              maxW={"200px"}
-              onChange={handleInputChange}
-            />
-
-            <InputSimple
-              type="textarea"
-              title="Aplicação"
-              value={formData.application}
-              name="application"
-              isEdit={isEdit}
-              maxW={"200px"}
-              onChange={handleInputChange}
+              onChange={handleInputTableChange}
             />
           </Align>
+
+          {userType === "admin" && isEdit && (
+            <Button
+              text={"Salvar"}
+              onClick={handleClickSaveProduct}
+              type={"primary"}
+            />
+          )}
         </Align>
-
-        <Align gap={"20px"} column>
-          <DynamicInputs
-            inputValues={formData.inputTopics}
-            isEdit={isEdit}
-            onChange={handleInputTopicsChange}
-          />
-
-          <InputTable
-            inputValue={formData.inputTable}
-            isEdit={isEdit}
-            onChange={handleInputTableChange}
-          />
-        </Align>
-
-        {userType === "admin" && isEdit && (
-          <Button
-            text={"Salvar"}
-            onClick={handleClickSaveProduct}
-            type={"primary"}
-          />
-        )}
-      </Align>
-    </BasicModal>
+      </BasicModal>
+    </>
   )
 }

@@ -19,7 +19,7 @@ export const HeaderNav = styled.header`
   left: 0;
   width: 100%;
   background-color: var(--bg-color);
-  z-index: 9999;
+  z-index: 9998;
   box-shadow: var(--box-shadow);
 
   @media (max-width: 768px) {
@@ -138,7 +138,19 @@ export const LogOutIcon = styled(BaseIcon).attrs({
 `
 
 export const SectionWithPaddingTop = styled.div`
-  padding-top: 84px;
+padding-top: min(20%, 84px);
+`
+
+export const ImgHeader = styled.img`
+  transition: opacity 0.5s ease;
+  user-select: none;
+  width: 100%;
+  height: 220px; /* Defina a altura desejada */
+  object-fit: cover; /* Mantém a proporção sem distorcer a imagem */
+  object-position: bottom; /* Garante que o recorte seja feito pegando a parte de baixo */
+  @media(width < 768px){
+    height: 200px;
+  }
 `
 
 export const Points = styled.div`

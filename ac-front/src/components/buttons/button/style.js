@@ -107,8 +107,8 @@ export const LoadingIcon = styled(ProgressActivity)`
 `
 
 export const ContentIcon = styled.div`
-  width: 100%;
-  height: 100%;
+  width: ${({ size }) => size || '27px'};
+  height: ${({ size }) => size || '27px'};
   align-items: center;
   justify-content: center;
   display: flex;
@@ -141,4 +141,11 @@ export const ContentIcon = styled.div`
 export const SpanText = styled.p`
   display: inline;
   white-space: nowrap;
+`
+
+export const ButtonWithIcon = styled.p`
+  display: flex;
+  gap: 6px;
+  align-items:center;
+  justify-content:center;
 `

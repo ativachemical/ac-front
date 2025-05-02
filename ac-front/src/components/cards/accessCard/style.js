@@ -3,7 +3,7 @@ import { User } from "../../../assets/icons/index"
 
 export const Card = styled.div`
   // user-select:none;
-  width: 330px;
+  width: 380px;
   height: auto;
   background-color: var(--bg-color);
   border-radius: 20px;
@@ -18,6 +18,7 @@ export const Content = styled.a`
   padding: 10% 10%;
   justify-content: center;
   z-index: 9999;
+  width: 100%; 
   gap: 25px;
 `
 export const ContentButtonCard = styled.div`

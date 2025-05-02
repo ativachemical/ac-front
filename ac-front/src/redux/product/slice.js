@@ -3,6 +3,7 @@ import { getLocalStorage, setLocalStorage } from "../../utils"
 
 const initialState = {
   segments: getLocalStorage("product_filter_segments") || ["agricultura", "tintas_e_resinas", "tratamento_de_agua", "cuidados_em_casa"],
+  isDeletedSegment: getLocalStorage("product_filter_is_deleted"),
   renderType: "Table",
   itemsPerPage: 97,
   skipsPerPage: 3,
@@ -54,8 +55,19 @@ const productSlice = createSlice({
       setLocalStorage("product_filter_segments", state.segments)
       setLocalStorage("product_filter_segments_is_all_checked", state.isAllChecked)
     },
+    justOneInSegmentList: (state, action) => {
+      const productName = action.payload;
+      state.segments = [productName]; // Define apenas o segmento selecionado
+      state.isAllChecked = allSegments.every(segment => state.segments.includes(segment));
+      setLocalStorage("product_filter_segments", state.segments);
+      setLocalStorage("product_filter_segments_is_all_checked", state.isAllChecked);
+    },
     isIncludedSegment: (state, action) => {
       return state.segments.includes(action.payload)
+    },
+    setIsDeletedSegment: (state, action) => {
+      state.isDeletedSegment = action.payload;
+      setLocalStorage("product_filter_is_deleted", action.payload);
     },
     getIsAllChecked: (state) => {
       return state.segments.length === allSegments.length
@@ -88,7 +100,10 @@ export const {
   setSkipsPerPage,
   toggleIsManualPagination,
   updateSegmentList,
+  justOneInSegmentList,
   isIncludedSegment,
+  setIsDeletedSegment,
+  getIsDeletedSegment,
   getIsAllChecked,
   toggleIsModalByIdOpen,
   getIsModalByIdOpen,

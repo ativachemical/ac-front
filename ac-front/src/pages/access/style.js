@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import {CutOutLogo, InlineLogo} from '../../assets/imgs'
+import { CutOutLogo, InlineLogo } from '../../assets/imgs'
 
-export const PageContent  = styled.div`
+export const PageContent = styled.div`
     display:flex;
     height:100vh;
     @media(width < 768px){
@@ -9,7 +9,7 @@ export const PageContent  = styled.div`
     }
 `
 
-export const Left  = styled.div`
+export const Left = styled.div`
     display:flex;
     position:static;
     width:40vw;
@@ -62,8 +62,8 @@ export const BgImage = styled.div`
 `;
 
 export const ImgLogoInline = styled.img`
-width:150px;
-height:45px;
+width:190px;
+height:auto;
 @media (width < 768px) {
     display: none;
 }
